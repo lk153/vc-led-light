@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login &amp; Registration | LuminaLED</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2b8cee",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased min-h-screen">
+<div class="flex min-h-screen w-full flex-col lg:flex-row">
+<!-- Left Side: Atmospheric Image -->
+<div class="relative hidden lg:flex lg:w-1/2 xl:w-3/5 items-center justify-center bg-background-dark">
+<div class="absolute inset-0 bg-cover bg-center opacity-70" data-alt="Modern architectural building with electric blue LED accent lighting at night" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBdTyw7AwChq8obJCMo6Q2RD6Uly1JyhJwKfJl0J6b_xQ-VSOkLJwnMDxXzvUj2S-L9MwVb2CMZ73v-y36iCdUFiOIrXNFIuSbYa50IWjB5l9YFrs3XoEsMxaH2V9sB7yo5T10XBjODcByPiwQDoYFwlunM4YNHLLO_2qUA_gJgseOybqp04sHtF-p-ZrzsDuWhhlOIJnig9Zk08KXApX93oGhJVneYQ6o6DD_2x7iaQgdc-jfHkq0jlYGPasvN8ci5zlESdMy07lKV');">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/90 via-transparent to-transparent"></div>
+<div class="relative z-10 p-12 max-w-2xl">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-primary text-5xl">lightbulb</span>
+<h1 class="text-white text-3xl font-black tracking-tight">LuminaLED</h1>
+</div>
+<h2 class="text-white text-5xl font-extrabold leading-tight mb-6">Illuminating the future of architecture.</h2>
+<p class="text-slate-300 text-lg font-medium max-w-md">
+                    Join our professional network of architects and designers to access exclusive LED collections and technical support.
+                </p>
+</div>
+<div class="absolute bottom-8 left-12 flex items-center gap-4 text-slate-400 text-sm">
+<span>© 2024 LuminaLED International</span>
+<span class="w-1 h-1 bg-slate-600 rounded-full"></span>
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<span class="w-1 h-1 bg-slate-600 rounded-full"></span>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+<!-- Right Side: Login/Registration Form -->
+<div class="flex flex-1 flex-col justify-center px-6 py-12 lg:px-16 xl:px-24 bg-white dark:bg-background-dark">
+<!-- Mobile Header -->
+<div class="flex items-center gap-2 mb-12 lg:hidden">
+<span class="material-symbols-outlined text-primary text-3xl font-bold">lightbulb</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold">LuminaLED</h2>
+</div>
+<div class="w-full max-w-md mx-auto">
+<div class="mb-10 text-center lg:text-left">
+<h1 class="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Welcome to the future</h1>
+<p class="mt-2 text-slate-500 dark:text-slate-400">Please enter your details to access your account.</p>
+</div>
+<!-- Toggle Component -->
+<div class="flex h-12 w-full items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 p-1 mb-8">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm text-slate-500 dark:text-slate-400 has-[:checked]:text-primary text-sm font-semibold transition-all">
+<span class="truncate">Login</span>
+<input checked="" class="hidden" name="auth-mode" type="radio" value="login"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-sm text-slate-500 dark:text-slate-400 has-[:checked]:text-primary text-sm font-semibold transition-all">
+<span class="truncate">Sign Up</span>
+<input class="hidden" name="auth-mode" type="radio" value="signup"/>
+</label>
+</div>
+<form action="#" class="space-y-5" method="POST">
+<!-- Email Field -->
+<div class="flex flex-col gap-2">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold">Email Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">mail</span>
+<input class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-slate-400" placeholder="name@company.com" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold">Password</label>
+<a class="text-primary text-xs font-bold hover:underline" href="#">Forgot password?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">lock</span>
+<input class="w-full pl-12 pr-12 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-slate-400" placeholder="••••••••" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-2 py-1">
+<input class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary" id="remember" type="checkbox"/>
+<label class="text-sm text-slate-500 dark:text-slate-400" for="remember">Keep me logged in</label>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2" type="submit">
+<span>Sign In to Account</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</form>
+<!-- Divider -->
+<div class="relative my-10">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-slate-200 dark:border-slate-800"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="bg-white dark:bg-background-dark px-4 text-slate-400 uppercase tracking-widest font-medium text-[10px]">Or continue with</span>
+</div>
+</div>
+<!-- Social Logins -->
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+<svg class="w-5 h-5" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z" fill="#EA4335"></path>
+</svg>
+<span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Google</span>
+</button>
+<button class="flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+<svg class="w-5 h-5 fill-black dark:fill-white" viewbox="0 0 24 24">
+<path d="M12.152 6.896c-.149 0-.307.013-.473.041-.434.071-.788.33-1.023.773-.233.435-.215.932.052 1.44.206.393.539.584.991.584.153 0 .313-.024.478-.051.434-.074.787-.334 1.021-.773.235-.436.215-.935-.054-1.442-.204-.385-.541-.572-.992-.572zm4.35 11.23c-1.242 0-2.434-.725-2.434-2.126 0-1.444 1.282-1.956 2.378-1.956.34 0 .762.034 1.05.092.054.51.012 1.58-.04 2.058-.258.983-1.042 1.932-1.932 1.932zm-6.072.585c-.93 0-1.89-.253-2.678-.71l.542-1.12c.602.348 1.343.585 2.148.585 1.48 0 2.222-1.027 2.222-2.327 0-.256-.02-.55-.052-.782-.444.185-.922.28-1.428.28-1.503 0-2.733-.715-2.733-2.227 0-1.397.942-2.456 2.503-2.456.344 0 .66.053.944.152.176-.58.73-1.055 1.558-1.055.244 0 .463.053.64.12l-.248 1.13c-.1-.04-.216-.066-.34-.066-.4 0-.573.29-.688.75-.028.113-.06.293-.076.452.54-.29 1.154-.45 1.834-.45 1.848 0 3.323 1.253 3.323 3.65 0 3.033-2.023 5.085-5.32 5.085zM12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0z"></path>
+</svg>
+<span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Apple</span>
+</button>
+</div>
+<div class="mt-12 text-center">
+<p class="text-sm text-slate-500 dark:text-slate-400">
+                        Need a corporate account for large-scale projects?
+                        <a class="text-primary font-bold hover:underline ml-1" href="#">Contact Enterprise Sales</a>
+</p>
+</div>
+</div>
+</div>
+</div>
+</body></html>

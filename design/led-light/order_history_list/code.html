@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order History - LED Bright</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2b8cee",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 md:px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-8">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">LED Bright</h2>
+</div>
+<nav class="hidden lg:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Home</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Products</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Deals</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Support</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-4 items-center">
+<label class="hidden md:flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-slate-100 dark:bg-slate-800">
+<div class="text-slate-500 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 text-slate-900 dark:text-white placeholder:text-slate-500 px-4 text-sm font-normal" placeholder="Search products" value=""/>
+</div>
+</label>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-primary text-white hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex flex-1 justify-center py-8">
+<div class="layout-content-container flex flex-col max-w-[1024px] flex-1 px-4 md:px-10">
+<!-- Header Section -->
+<div class="flex flex-col gap-2 mb-8">
+<h1 class="text-slate-900 dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">Your Orders</h1>
+<p class="text-slate-500 dark:text-slate-400 text-base">Track, manage, and reorder your favorite LED lighting solutions.</p>
+</div>
+<!-- Search and Filter Bar -->
+<div class="flex flex-col md:flex-row gap-4 mb-8">
+<div class="flex-1">
+<label class="flex flex-col w-full h-12">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="text-slate-400 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 text-slate-900 dark:text-white placeholder:text-slate-400 px-4 text-base" placeholder="Search all orders (ID, item name...)" value=""/>
+</div>
+</label>
+</div>
+<div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+<button class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary text-white px-5 font-medium shadow-md shadow-primary/20">
+<span class="text-sm">Last 6 months</span>
+<span class="material-symbols-outlined text-lg">keyboard_arrow_down</span>
+</button>
+<button class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 px-5 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="text-sm">2023</span>
+<span class="material-symbols-outlined text-lg">keyboard_arrow_down</span>
+</button>
+<button class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 px-5 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="text-sm">More</span>
+<span class="material-symbols-outlined text-lg">tune</span>
+</button>
+</div>
+</div>
+<!-- Order Cards List -->
+<div class="flex flex-col gap-6">
+<!-- Order Card 1: Delivered -->
+<div class="flex flex-col rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap justify-between items-center gap-4">
+<div class="flex gap-8">
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Order Placed</p>
+<p class="text-slate-900 dark:text-white text-sm font-semibold">October 24, 2023</p>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Total</p>
+<p class="text-slate-900 dark:text-white text-sm font-semibold">$124.50</p>
+</div>
+<div class="hidden sm:block">
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Ship To</p>
+<p class="text-slate-900 dark:text-white text-sm font-semibold underline decoration-dotted cursor-help">Alex Johnson</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Order #</p>
+<p class="text-slate-900 dark:text-white text-sm font-semibold">10928-8421</p>
+</div>
+</div>
+<div class="p-6 flex flex-col md:flex-row gap-6">
+<div class="w-full md:w-32 h-32 shrink-0 bg-slate-100 dark:bg-slate-800 rounded-lg bg-center bg-no-repeat bg-cover" data-alt="Modern geometric RGB LED wall panel" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBUgY2o8ZcD7E0DaSwH9lhrLjKR64d0adf18wC4Zs9j1kiuNkRfmEarT56h7ymbWqW7ZYY_Scljq8blL8xBU0WGu-47npraX_Z9f4BtttMdUP4vtf8RV8vNnigUdbi8vvZw_biXKHnbVJlvAzA4lKDT3zVyONbdProq8EOrOI7-YrtyUDw-xx5xp5gi750-7T2ULaiT5Zsylna1PcBJ410l36P48H1mHdi-Y8M5JH0mQqSOlFofvTIOHCPL_2AjRWhR3H5hlm0tv7ea");'></div>
+<div class="flex-1 flex flex-col gap-2">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-green-500 text-xl font-bold">check_circle</span>
+<p class="text-slate-900 dark:text-white font-bold">Delivered Oct 27</p>
+</div>
+<p class="text-slate-700 dark:text-slate-300 font-medium">Smart RGBIC LED Wall Panels (9 Pack)</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Package was handed to resident.</p>
+<div class="flex flex-wrap gap-2 mt-4">
+<button class="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/90 transition-colors">Buy Again</button>
+<button class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm font-bold rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">View Details</button>
+<button class="px-4 py-2 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Write a Review</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Card 2: Processing/Track -->
+<div class="flex flex-col rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap justify-between items-center gap-4">
+<div class="flex gap-8">
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Order Placed</p>
+<p class="text-slate-900 dark:text-white text-sm font-semibold">November 12, 2023</p>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Total</p>
+<p class="text-slate-900 dark:text-white text-sm font-semibold">$89.00</p>
+</div>
+<div class="hidden sm:block">
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Ship To</p>
+<p class="text-slate-900 dark:text-white text-sm font-semibold underline decoration-dotted cursor-help">Alex Johnson</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Order #</p>
+<p class="text-slate-900 dark:text-white text-sm font-semibold">11042-9921</p>
+</div>
+</div>
+<div class="p-6 flex flex-col md:flex-row gap-6">
+<div class="w-full md:w-32 h-32 shrink-0 bg-slate-100 dark:bg-slate-800 rounded-lg bg-center bg-no-repeat bg-cover" data-alt="Dimmable LED architectural strip lighting" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD9J-nHQC2ZbhChx781K2wBYQCcCoORBRX6D60HdyY9M6w0eXqmAw-61vYf6u9GMu0p_aLXME7s-xgK4tSgHrpJlyI_6TTpTtt4S-ocQmS3-KWMj5RRHpQyXkoMBg9e-3a8_tCtB5ZrEESiQBIzbla4XCKhWHDP8hRDwSGokWOz8cwwbEnqL1ED1-ap6B59fJ3n1JTg60O0RMO75rxFcbfxsB3MMEzJZb9D6kogCfojyd-g__VKYr9rYs_6NJwMzo3SIvmwyKQGekjP");'></div>
+<div class="flex-1 flex flex-col gap-2">
+<div class="flex items-center gap-2 mb-1 text-primary">
+<span class="material-symbols-outlined text-xl font-bold">local_shipping</span>
+<p class="text-primary font-bold">Arriving Thursday</p>
+</div>
+<p class="text-slate-700 dark:text-slate-300 font-medium">Warm White Dimmable LED Strips (50ft)</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Shipped from logistics center in Chicago.</p>
+<div class="flex flex-wrap gap-2 mt-4">
+<button class="px-6 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/90 transition-colors shadow-sm">Track Order</button>
+<button class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm font-bold rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">View Details</button>
+<button class="px-4 py-2 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Edit Order</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Card 3: Older -->
+<div class="flex flex-col rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden opacity-90">
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap justify-between items-center gap-4">
+<div class="flex gap-8">
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Order Placed</p>
+<p class="text-slate-900 dark:text-white text-sm font-semibold">August 05, 2023</p>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Total</p>
+<p class="text-slate-900 dark:text-white text-sm font-semibold">$45.99</p>
+</div>
+<div class="hidden sm:block">
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Ship To</p>
+<p class="text-slate-900 dark:text-white text-sm font-semibold underline decoration-dotted cursor-help">Alex Johnson</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Order #</p>
+<p class="text-slate-900 dark:text-white text-sm font-semibold">10811-1229</p>
+</div>
+</div>
+<div class="p-6 flex flex-col md:flex-row gap-6">
+<div class="w-full md:w-32 h-32 shrink-0 bg-slate-100 dark:bg-slate-800 rounded-lg bg-center bg-no-repeat bg-cover" data-alt="Outdoor waterproof LED flood light" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAdZSEH-FqESx0B3exelDK6zSSq8qyaH_l391o7GljxKvXvrCW7ho6YXv4gqtV3_mIA-97TJTzBk51TuSDZrdW6mmFgn70SuuFwki54seIbZqVSYc_sIRa80sYFX3c-M4PWOn_qQdprUcm17TdZ6qVIbs5RDLXxkEPmxS0CZuKqdrNBY_GwlpY8ipBEUfCbsU757wqYqdRMNtrbAE0MaYiiKDpUBXBOxe70a6Y-7krAjV-YXqs3Rl2Y5rBv1FXeg3E0uFgNgH29uY9-");'></div>
+<div class="flex-1 flex flex-col gap-2">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-green-500 text-xl font-bold">check_circle</span>
+<p class="text-slate-900 dark:text-white font-bold">Delivered Aug 09</p>
+</div>
+<p class="text-slate-700 dark:text-slate-300 font-medium">Ultra-Bright LED Outdoor Flood Light (100W)</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Item is eligible for return until Sep 09.</p>
+<div class="flex flex-wrap gap-2 mt-4">
+<button class="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/90 transition-colors">Buy Again</button>
+<button class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm font-bold rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">View Details</button>
+<button class="px-4 py-2 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Get Product Support</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination / Load More -->
+<div class="mt-12 flex justify-center">
+<button class="flex items-center gap-2 px-8 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-700 dark:text-slate-200 font-bold hover:shadow-md transition-all">
+<span>Load Older Orders</span>
+<span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8">
+<div class="max-w-[1024px] mx-auto px-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2 text-primary opacity-80">
+<span class="material-symbols-outlined">lightbulb</span>
+<span class="font-bold">LED Bright © 2023</span>
+</div>
+<div class="flex gap-8">
+<a class="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Contact Us</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

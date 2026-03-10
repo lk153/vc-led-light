@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#2b8cee",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+            },
+            fontFamily: {
+              "display": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<title>Billing Information | LED Lumina</title>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Navigation -->
+<nav class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-16 items-center">
+<div class="flex items-center gap-2">
+<div class="bg-primary p-1.5 rounded-lg">
+<span class="material-icons text-white">lightbulb</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white uppercase">LED<span class="text-primary font-black">Lumina</span></span>
+</div>
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2 text-primary font-medium">
+<span class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs">1</span>
+<span class="text-sm">Shipping</span>
+</div>
+<div class="h-px w-8 bg-slate-300 dark:bg-slate-700"></div>
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-xs">2</span>
+<span class="text-sm">Billing</span>
+</div>
+<div class="h-px w-8 bg-slate-300 dark:bg-slate-700"></div>
+<div class="flex items-center gap-2 text-slate-400 dark:text-slate-600">
+<span class="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-700 flex items-center justify-center text-xs text-slate-400">3</span>
+<span class="text-sm">Payment</span>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left Column: Form -->
+<div class="lg:col-span-8">
+<div class="mb-8">
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Billing Information</h1>
+<p class="text-slate-600 dark:text-slate-400">Please enter the address associated with your credit card.</p>
+</div>
+<form class="space-y-8 bg-white dark:bg-slate-900/50 p-8 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- First Name -->
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">First Name</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary px-4 py-3 text-slate-900 dark:text-white" placeholder="e.g. John" type="text" value="Jonathan"/>
+</div>
+<!-- Last Name -->
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Last Name</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary px-4 py-3 text-slate-900 dark:text-white" placeholder="e.g. Smith" type="text" value="Doe"/>
+</div>
+<!-- Address -->
+<div class="md:col-span-2 space-y-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Street Address</label>
+<div class="relative">
+<span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">home</span>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary pl-12 pr-4 py-3 text-slate-900 dark:text-white" placeholder="123 Neon Way" type="text"/>
+</div>
+</div>
+<!-- Apartment/Suite (Optional) -->
+<div class="md:col-span-2 space-y-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Apartment, suite, etc. (optional)</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary px-4 py-3 text-slate-900 dark:text-white" placeholder="Suite 405" type="text"/>
+</div>
+<!-- City -->
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">City</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary px-4 py-3 text-slate-900 dark:text-white" placeholder="Los Angeles" type="text"/>
+</div>
+<!-- Country/State -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">State</label>
+<select class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary px-4 py-3 text-slate-900 dark:text-white appearance-none">
+<option>California</option>
+<option>New York</option>
+<option>Texas</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">ZIP Code</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary px-4 py-3 text-slate-900 dark:text-white border-red-500 ring-1 ring-red-500 ring-opacity-50" placeholder="90001" type="text"/>
+<p class="text-xs text-red-500 mt-1">Please enter a valid zip code</p>
+</div>
+</div>
+<!-- Phone -->
+<div class="md:col-span-2 space-y-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Phone Number (for billing verification)</label>
+<div class="relative flex">
+<span class="inline-flex items-center px-4 bg-slate-100 dark:bg-slate-800 border border-r-0 border-slate-200 dark:border-slate-700 rounded-l-lg text-slate-500 text-sm font-medium">+1</span>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-r-lg focus:ring-primary focus:border-primary px-4 py-3 text-slate-900 dark:text-white" placeholder="(555) 000-0000" type="tel"/>
+</div>
+</div>
+</div>
+<div class="pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-4 justify-between items-center">
+<button class="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors font-medium" type="button">
+<span class="material-icons text-sm">arrow_back</span>
+                            Return to shipping
+                        </button>
+<button class="w-full md:w-auto bg-primary hover:bg-primary/90 text-white font-bold py-4 px-10 rounded-xl shadow-lg shadow-primary/25 transition-all flex items-center justify-center gap-2" type="submit">
+                            Continue to Payment
+                            <span class="material-icons">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+<!-- Right Column: Order Summary -->
+<div class="lg:col-span-4">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 sticky top-24">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-6">Order Summary</h2>
+<div class="space-y-4 mb-8">
+<div class="flex gap-4">
+<div class="relative h-20 w-20 flex-shrink-0 bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden">
+<img alt="LED Strip" class="h-full w-full object-cover" data-alt="RGB LED flexible light strip roll" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ5_Na6jDCZ9D9G8q4S_YAQTCcm0ls-5vFdEj2_NmFQjt7ZV48cTcf67ezXFW9xxOtVpFSJAUcm20EezdvWttO8v9nq0ub9_gi4VAu99RNhIC7Z7UFLUHSDyx9Amo1HWPN2Pg83D99mtpourxtgNhx4yfdOdFp3qg61rde7PKPH-hiZIDi_v3ECgBvcsP7mD_jPXY7gB81QSD_O4XHDQp5gUVee9In0BT3aJM6NcNiNByU6xy2G6ByU9EBMBr1LN3U3pkUUJr-eIfA"/>
+<span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center">2</span>
+</div>
+<div class="flex-1">
+<h3 class="text-sm font-semibold text-slate-900 dark:text-white">Smart RGB LED Strip (5m)</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Multi-color, Wi-Fi Enabled</p>
+<p class="text-sm font-bold text-primary mt-1">$49.98</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="relative h-20 w-20 flex-shrink-0 bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden">
+<img alt="LED Bulb" class="h-full w-full object-cover" data-alt="Modern geometric LED desk lamp" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeJAJX8LhXcj-hfP53_lhDLXOB0MTM0gIOlnpq3WdnGQMAq5jiJGMguqIImRuv2-gFwdFQknCyhbv6h3KKNI5493xkoF0vH5tj5lDcANzJvrcgUZ1oaf4lxwRkqWeaEs3QC607hXf89CpwYVgZidkrDVtiPGK1p-lIT2vliXyPy8Y9QvxQX9Wdk7t4KQfogxYYXdXSy4HNBpdxm7KNmiIGXyAPFahU841bucItNuaYxMjdsPDoJau15QIaJ2A6J82y4713-aAvu0gK"/>
+<span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center">1</span>
+</div>
+<div class="flex-1">
+<h3 class="text-sm font-semibold text-slate-900 dark:text-white">Architectural Desk Lamp</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Warm White, Dimmer</p>
+<p class="text-sm font-bold text-primary mt-1">$85.00</p>
+</div>
+</div>
+</div>
+<div class="space-y-3 py-6 border-t border-slate-200 dark:border-slate-800">
+<div class="flex justify-between text-slate-600 dark:text-slate-400 text-sm">
+<span>Subtotal</span>
+<span class="font-medium text-slate-900 dark:text-white">$134.98</span>
+</div>
+<div class="flex justify-between text-slate-600 dark:text-slate-400 text-sm">
+<span>Shipping</span>
+<span class="text-green-500 font-medium">Free</span>
+</div>
+<div class="flex justify-between text-slate-600 dark:text-slate-400 text-sm">
+<span>Tax (8%)</span>
+<span class="font-medium text-slate-900 dark:text-white">$10.80</span>
+</div>
+</div>
+<div class="pt-6 border-t border-slate-200 dark:border-slate-800 flex justify-between items-end">
+<span class="text-lg font-bold text-slate-900 dark:text-white">Total</span>
+<div class="text-right">
+<span class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest block mb-1">USD</span>
+<span class="text-2xl font-black text-primary">$145.78</span>
+</div>
+</div>
+<!-- Discount Code -->
+<div class="mt-8">
+<div class="flex gap-2">
+<input class="flex-1 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm px-4 py-2 focus:ring-primary focus:border-primary" placeholder="Discount code" type="text"/>
+<button class="bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-bold px-4 rounded-lg text-sm transition-colors">Apply</button>
+</div>
+</div>
+<!-- Trust Badges -->
+<div class="mt-8 flex justify-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all duration-300">
+<span class="material-icons text-2xl" title="Secure Payment">verified_user</span>
+<span class="material-icons text-2xl" title="Fast Delivery">local_shipping</span>
+<span class="material-icons text-2xl" title="Premium Support">support_agent</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2">
+<div class="bg-slate-100 dark:bg-slate-800 p-1.5 rounded-lg">
+<span class="material-icons text-primary">lightbulb</span>
+</div>
+<span class="text-lg font-bold tracking-tight text-slate-900 dark:text-white uppercase italic">LED<span class="text-primary">Lumina</span></span>
+</div>
+<div class="flex gap-8 text-sm text-slate-500 dark:text-slate-400">
+<a class="hover:text-primary transition-colors" href="#">Refund Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Shipping Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+<div class="text-xs text-slate-400 dark:text-slate-600">
+                    © 2024 LED Lumina. All rights reserved.
+                </div>
+</div>
+</div>
+</footer>
+</body></html>

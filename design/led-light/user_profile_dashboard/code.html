@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Profile Dashboard - Lumina LED</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2b8cee",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 lg:px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-8 flex items-center justify-center bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary text-2xl">lightbulb</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">Lumina LED</h2>
+</div>
+<div class="hidden md:flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-slate-100 dark:bg-slate-800">
+<div class="text-slate-500 dark:text-slate-400 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="w-full border-none bg-transparent focus:ring-0 text-slate-900 dark:text-white placeholder:text-slate-500 text-sm px-3" placeholder="Search products..." value=""/>
+</div>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="hidden lg:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">Shop</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">Deals</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">Support</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg size-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-all">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="flex items-center justify-center rounded-lg size-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-all relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+</div>
+<div class="bg-primary/20 rounded-full size-10 flex items-center justify-center overflow-hidden border-2 border-primary/20">
+<img class="w-full h-full object-cover" data-alt="User profile avatar of a smiling man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwGA7Aj2DDYNkPGrhxE0Fqsyotj5TRm6ZB043m4bEpaZAOb123GSknPT8ArKAD0OTtLbjs_en13G2u3b8JuhM5dm8Zh9OvnJOGSFTL0_u6vG3HL6QRbv1T7VZth4NQ0nDPx96pqS7YoL31JSToVQ-6_63bldF5dGPqj0rDGU4gEDK2TVh6PvNHcA9PP_0Pw5MHLGmJgO5u4n0wkJVBLv9l2eOnJw70UhHcK9EKLVA6K6rwxn1rO1vbTN_nmphDCYhhVU87xVng5ECK"/>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-[1280px] mx-auto w-full px-4 lg:px-10 py-8">
+<div class="flex flex-col lg:flex-row gap-8">
+<aside class="w-full lg:w-64 flex flex-col gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4 mb-8">
+<div class="size-12 rounded-full overflow-hidden border-2 border-primary">
+<img class="w-full h-full object-cover" data-alt="Main profile picture placeholder" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCK4X30009L3YtmZHaxB_ukt1pcZjWgDoQ4ZYg1YixvyXegPU6TYGLvT8KtA2vQnWlz7V3_t3b1Zn5Lc-QJdxBS6zaFn4tTzbAgZROcedrIoXJWrS5gsdqptG-FgIiIA6nbHVMMqtzJw23MHl-0DhImKHxuIDxdKJZZNggFM562ZiQEVoJ4l3kS3cohTfo6H-NaTi6wATSsSOsT8mI4QaklT3xLJ5X-OPRdfG3lZ5Y_Nm8UMxx94N_b6HPrmbnxfg64r4pNFWIzA-Zz"/>
+</div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-base font-bold leading-tight">Alex Johnson</h1>
+<p class="text-primary text-xs font-semibold uppercase tracking-wider">Gold Member</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary text-white font-medium shadow-md shadow-primary/20 transition-all" href="#">
+<span class="material-symbols-outlined text-[22px]">person</span>
+<span class="text-sm">Profile Info</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-all" href="#">
+<span class="material-symbols-outlined text-[22px]">package_2</span>
+<span class="text-sm">Order History</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-all" href="#">
+<span class="material-symbols-outlined text-[22px]">location_on</span>
+<span class="text-sm">Saved Addresses</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-all" href="#">
+<span class="material-symbols-outlined text-[22px]">shield_person</span>
+<span class="text-sm">Security</span>
+</a>
+</nav>
+<div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+<button class="flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 font-bold transition-all text-sm">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span>Logout</span>
+</button>
+</div>
+</div>
+</aside>
+<div class="flex-1 flex flex-col gap-6">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+<div>
+<h2 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Profile Dashboard</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Manage your account settings and track your lighting projects.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm group hover:border-primary transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined">shopping_bag</span>
+</div>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Lifetime</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Orders</p>
+<p class="text-3xl font-bold text-slate-900 dark:text-white mt-1">24</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm group hover:border-primary transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg text-orange-600 dark:text-orange-400">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<span class="text-[10px] font-bold text-orange-500 uppercase tracking-widest">In Transit</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Active Orders</p>
+<p class="text-3xl font-bold text-slate-900 dark:text-white mt-1">2</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm group hover:border-primary transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg text-green-600 dark:text-green-400">
+<span class="material-symbols-outlined">redeem</span>
+</div>
+<span class="text-[10px] font-bold text-green-500 uppercase tracking-widest">Balance</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Reward Points</p>
+<p class="text-3xl font-bold text-slate-900 dark:text-white mt-1">1,250</p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">Personal Details</h3>
+<button class="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-bold hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+<span>Edit Profile</span>
+</button>
+</div>
+<div class="p-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+<div class="space-y-1">
+<label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Full Name</label>
+<p class="text-slate-900 dark:text-white font-medium text-lg">Alex Johnson</p>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Email Address</label>
+<p class="text-slate-900 dark:text-white font-medium text-lg">alex.johnson@example.com</p>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Phone Number</label>
+<p class="text-slate-900 dark:text-white font-medium text-lg">+1 (555) 123-4567</p>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Account Type</label>
+<div class="flex items-center gap-2">
+<p class="text-slate-900 dark:text-white font-medium text-lg">Residential Individual</p>
+<span class="px-2 py-0.5 bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-[10px] font-black rounded uppercase">Verified</span>
+</div>
+</div>
+<div class="md:col-span-2 space-y-4 mt-4">
+<label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Membership Status</label>
+<div class="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">Gold Tier Progress</span>
+<span class="text-sm font-bold text-primary">85% to Platinum</span>
+</div>
+<div class="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%] rounded-full shadow-[0_0_10px_rgba(43,140,238,0.5)]"></div>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-4 leading-relaxed">
+                                            You are 750 points away from Platinum membership. Platinum members enjoy free express shipping and exclusive early access to New RGB Smart LED releases.
+                                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h4 class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+                                Default Shipping Address
+                            </h4>
+<div class="text-slate-600 dark:text-slate-400 text-sm space-y-1">
+<p class="font-bold text-slate-900 dark:text-white">Home Office</p>
+<p>123 Neon Way, Suite 400</p>
+<p>Lumina Heights, CA 90210</p>
+<p>United States</p>
+</div>
+<button class="mt-4 text-primary text-xs font-bold hover:underline">Manage Addresses</button>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h4 class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">credit_card</span>
+                                Default Payment Method
+                            </h4>
+<div class="flex items-center gap-4">
+<div class="w-12 h-8 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-slate-400">payments</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Visa Ending in 4242</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Expires 12/26</p>
+</div>
+</div>
+<button class="mt-4 text-primary text-xs font-bold hover:underline">Manage Payments</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-auto py-10 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+<div class="max-w-[1280px] mx-auto px-6 lg:px-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">lightbulb</span>
+<span class="font-bold text-slate-900 dark:text-white">Lumina LED</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm">© 2024 Lumina LED Lighting Solutions. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">language</span></a>
+<a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">help_center</span></a>
+<a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">policy</span></a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

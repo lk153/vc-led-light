@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Product Detail Page - LuminaLED</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#2b8cee",
+                "background-light": "#f6f7f8",
+                "background-dark": "#101922",
+              },
+              fontFamily: {
+                "display": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-size: 20px; vertical-align: middle; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-3">
+<div class="max-w-7xl mx-auto flex items-center justify-between gap-8">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-3xl font-bold">lightbulb</span>
+<h1 class="text-xl font-black tracking-tight text-slate-900 dark:text-slate-100">LuminaLED</h1>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Shop</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Categories</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Business</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Support</a>
+</nav>
+</div>
+<div class="flex-1 max-w-md hidden lg:block">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2 pl-10 pr-4 focus:ring-2 focus:ring-primary text-sm" placeholder="Search for smart lighting..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary transition-all">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary transition-all">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 lg:px-20 py-8">
+<!-- Breadcrumb -->
+<nav class="flex items-center gap-2 text-sm text-slate-500 mb-8">
+<a class="hover:text-primary" href="#">Home</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<a class="hover:text-primary" href="#">Indoor Lighting</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-slate-900 dark:text-slate-100 font-medium">Smart LED Bulbs</span>
+</nav>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left: Image Gallery -->
+<div class="lg:col-span-7 space-y-4">
+<div class="relative group aspect-square rounded-xl overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+<img class="w-full h-full object-cover" data-alt="Close up of a smart LED light bulb with warm glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApsjC6spJBMsiLGCIcqlf7lmYGKRetTepwZDeRK8_6Zbk-k5c5FVmdpL17lNRs3xDyMdHSniVTFCx047WaoDDkLWPEpG1g23aRGyZ78E3PE6DoWOpDc1YQzcJTH16ww9sqyTe8MXMHdqNOq-kKkaxA5n1VNYd7nnPGWedlHRK2ZKn5j1xxWwlmLQeut-KugPfrCQ4TLMsD5XPaHfPvUoPi3xwK-iZIueTgIjFqtpEa_B3tbXXvD9PyRBFdaVu8sGbwv3qP641BPIU6"/>
+<button class="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">zoom_in</span>
+</button>
+</div>
+<div class="grid grid-cols-4 gap-4">
+<div class="aspect-square rounded-lg border-2 border-primary overflow-hidden cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="Smart LED bulb front view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXynMNGk4OyThU-4-qlrs0lwUCaeXff3iZJ6danUvI4q2QivCLaVuBEZH2FTnaUsCb7EIvQdDMNoxmXEaue7LFI7cjUqcVFMObW_6ALE-PCM8pM-i5vfMFCw2Ak5mpkUuDukHWdeTZSTWge5Lew5dkeN_0uMl3pPP9K4FiPBciW-uimZOiqZgfC-9SgzxopDWQiSjYdw1Pe9NK8njpdvPMl374XSlPSn-97fAcpEwcQZECvTisJrZTlH3BswQi7RVBKOCeNGX4RKG_"/>
+</div>
+<div class="aspect-square rounded-lg border-2 border-transparent hover:border-primary overflow-hidden cursor-pointer transition-colors">
+<img class="w-full h-full object-cover" data-alt="Smart LED bulb in a modern lamp" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8tFDQhShmSqUeSzcvEFpgHfWl_GWo0Qxyf_ktSmIrEy_o7PmZnSmnYE81QUqGasX_LqpMGhGg3lcnardGcBcJZtJRimg6lSIfJ3iF_IbFwg0EmKmu0xHq1QNVFG11M01U_s2z4BElDfLKR88Krhk60VroxM24JijWOiB3Yva3syz92KIoD6BNI5xyT9sW_WMD5mBl7iBpg_JcvpBSGiEQepc2wT8vI9xUr9QhvhUhZw7fIYfOnzPBK36Mg1vVZ-R0wmONte3jKJDi"/>
+</div>
+<div class="aspect-square rounded-lg border-2 border-transparent hover:border-primary overflow-hidden cursor-pointer transition-colors">
+<img class="w-full h-full object-cover" data-alt="Smart LED bulb showing color range" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBp6ayoITjXaPq72H_2_JT4XAIU9DN1TNZLriMVJcJPDdi3OY7d8Rk1zKxqIwkSQa4mGvJIBHck2Y_pxLP_d8P-thFx9qA0vrnIQ2Jn5b75R-ku2FIxoEOqAwZWMfw7mxpznVP3VB20_r_r6yRr9frLcNt9qH4MkoPGRI-IgXGg_3o96YqLMb9NWru_FLT7Ornrs3FLfJTJMRpD3XbZMAb0uVUS-jkGrwyZKnhrvs4ygEL5SLNo60xVWylZaa0_0J21TYHCUxKQnNMf"/>
+</div>
+<div class="aspect-square rounded-lg border-2 border-transparent hover:border-primary overflow-hidden cursor-pointer transition-colors">
+<img class="w-full h-full object-cover" data-alt="Smart LED bulb packaging box" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNzIs6WTeSR8td5TQEWwVd_DmmbeCCngsHQP973iuA7IFMqf2VqYCvgMGS7JPUwbpqLwGL42MyXE8qahekhSvIF3J1WlUDRTwh7jo6kOcfOzYZ2w4EZRpdUg_RmCfBbW3HK3ZkDHDtY6BEbr_sQ0jU4SJy3vLDLXrHpFDQJ8itQIYdbJcCLnHGh0X2p6xvq3rVSNohR_Hi8VQjEZshiMG7XNKA2WCMe5BRWbwMALnVm_R-UESxN5ofKJjvEwKR8UTJ1ieqdvEIh6Qm"/>
+</div>
+</div>
+</div>
+<!-- Right: Product Info -->
+<div class="lg:col-span-5 space-y-6">
+<div>
+<span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-2">Bestseller</span>
+<h2 class="text-4xl font-black tracking-tight leading-tight mb-2">Lumina Pro A19 Smart LED</h2>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1 text-amber-400">
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined">star_half</span>
+<span class="text-slate-600 dark:text-slate-400 text-sm font-medium ml-1">4.8 (1,240 reviews)</span>
+</div>
+</div>
+</div>
+<div class="py-6 border-y border-slate-200 dark:border-slate-800">
+<div class="flex items-baseline gap-4 mb-1">
+<span class="text-4xl font-bold text-slate-900 dark:text-slate-100">$24.99</span>
+<span class="text-lg text-slate-400 line-through">$34.99</span>
+<span class="text-sm font-bold text-emerald-500">Save 28%</span>
+</div>
+<p class="text-sm text-slate-500">Free shipping on orders over $50</p>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold">Select Light Temperature</h4>
+<div class="flex flex-wrap gap-3">
+<button class="px-4 py-2 rounded-lg border-2 border-primary bg-primary/5 text-sm font-semibold">Warm White (2700K)</button>
+<button class="px-4 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-700 text-sm font-semibold hover:border-slate-400 transition-colors">Daylight (5000K)</button>
+<button class="px-4 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-700 text-sm font-semibold hover:border-slate-400 transition-colors">Full RGB Spectrum</button>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center border border-slate-300 dark:border-slate-700 rounded-lg overflow-hidden">
+<button class="px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">-</button>
+<span class="px-4 py-2 font-bold">1</span>
+<button class="px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">+</button>
+</div>
+<button class="flex-1 bg-primary text-white font-bold py-3 rounded-lg hover:brightness-110 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+                        Add to Cart
+                    </button>
+</div>
+<div class="grid grid-cols-2 gap-4 py-4">
+<div class="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+<span class="material-symbols-outlined text-primary">verified</span>
+<div class="text-xs">
+<p class="font-bold">2 Year Warranty</p>
+<p class="text-slate-500">Replacement coverage</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+<span class="material-symbols-outlined text-primary">eco</span>
+<div class="text-xs">
+<p class="font-bold">Energy Star</p>
+<p class="text-slate-500">85% more efficient</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Technical Specifications -->
+<section class="mt-20">
+<h3 class="text-2xl font-bold mb-8 flex items-center gap-2">
+<span class="material-symbols-outlined">settings_input_component</span>
+                Technical Specifications
+            </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+<span class="material-symbols-outlined text-primary mb-4 text-3xl">wb_sunny</span>
+<h4 class="text-lg font-bold mb-1">800 Lumens</h4>
+<p class="text-slate-500 text-sm">Equivalent to 60W traditional incandescent bulb with superior brightness.</p>
+</div>
+<div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+<span class="material-symbols-outlined text-primary mb-4 text-3xl">palette</span>
+<h4 class="text-lg font-bold mb-1">90+ CRI</h4>
+<p class="text-slate-500 text-sm">Color Rendering Index ensures true-to-life colors in your living space.</p>
+</div>
+<div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+<span class="material-symbols-outlined text-primary mb-4 text-3xl">history</span>
+<h4 class="text-lg font-bold mb-1">25,000 Hours</h4>
+<p class="text-slate-500 text-sm">Long-lasting lifetime rated for over 22 years of typical home use.</p>
+</div>
+</div>
+</section>
+<!-- Frequently Bought Together -->
+<section class="mt-20 bg-slate-100 dark:bg-slate-900 rounded-2xl p-8">
+<h3 class="text-2xl font-bold mb-8">Frequently Bought Together</h3>
+<div class="flex flex-col lg:flex-row items-center gap-8">
+<div class="flex flex-wrap items-center justify-center gap-6">
+<div class="w-32 aspect-square rounded-lg overflow-hidden border border-slate-200 bg-white">
+<img class="w-full h-full object-cover" data-alt="Primary smart LED bulb" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0ONNbXIv4yM5ThUEguTWzT0n7Rdc3oeUO2cKU1Tch8w8LHyDxAbcyN6Jc-OPsqY4VXdWk9bcp_u30vPnm_K_nk0-fpUpuXPAd1JK_a4ZSHYlli65k3eKVOZYIci6NTrOYFe2uA7W2SKmNki5KlbsHsRYWDLjcqz6oAn0btF-XONn5uLN95a2jHjYj4V0G2fI-lrCn4IsQmOqVPLEjMLIvlNoO8z0oNtLJCp1kbHSwghVXVbzZJVDxENqBQ2ETNnknJ2EtGvckIuyU"/>
+</div>
+<span class="material-symbols-outlined text-slate-400">add</span>
+<div class="w-32 aspect-square rounded-lg overflow-hidden border border-slate-200 bg-white">
+<img class="w-full h-full object-cover" data-alt="Smart bridge controller" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeASxMLQxR-7txyHYeS9FYNv5foJIZ4fMSQzggjhYR-VPUy7hPv5CbkKB5i572Gudz6gpoCfsb3TGj9q6MOvXOFjk67imj6mhXIXzuYaU_aB4uAfHm7P4ZqsrccbnKyD2N6LPJa6prg9EoJMB-z5dD93D8SBDtiMb7KbzDnvNV8IgzKVUbaLiOM38B0wWBmwQLzri1cSLAEfrT5GBYjOAn7JgHMyZ0rXzLhWYUo5aQoAJM0ToEoxgmWHbpfiPlH-Mk7gnHgAF-cCdg"/>
+</div>
+<span class="material-symbols-outlined text-slate-400">add</span>
+<div class="w-32 aspect-square rounded-lg overflow-hidden border border-slate-200 bg-white">
+<img class="w-full h-full object-cover" data-alt="Smart motion sensor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVqYvdSs_eEVQCMDAPKUMGzExTMdJrhMthT9p1WfliATC33o1BCcz15vyP3YQWrbAL7aGgnYw4173AODMv2m8o_jWwpoSk023QioFETMM5ZphuAEgZin0y0kQI-1EogtesTUjA2mwfYDi82PbxZWCL_IGh9PtSZeF7hf2wvhP_Sc5diyI89QcCvGB65P6-_HwgpWPDwAA9UC_TTIK_1stn85v3K3J175fjRtBFxn5URyvByFh9KmgJH3cYuWIIF25Y02X7Sjjt4tLf"/>
+</div>
+</div>
+<div class="lg:ml-auto text-center lg:text-left">
+<p class="text-slate-500 text-sm mb-1">Total Bundle Price</p>
+<p class="text-3xl font-black mb-4 text-primary">$89.97</p>
+<button class="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:brightness-110 transition-all">Add Bundle to Cart</button>
+</div>
+</div>
+</section>
+<!-- Customer Reviews -->
+<section class="mt-20">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+<div>
+<h3 class="text-2xl font-bold mb-2">Customer Reviews</h3>
+<div class="flex items-center gap-4">
+<span class="text-5xl font-black">4.8</span>
+<div>
+<div class="flex text-amber-400">
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+</div>
+<p class="text-sm text-slate-500">Based on 1,240 reviews</p>
+</div>
+</div>
+</div>
+<button class="px-6 py-3 border-2 border-primary text-primary font-bold rounded-lg hover:bg-primary hover:text-white transition-all">Write a Review</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Review Card 1 -->
+<div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 space-y-4">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">JD</div>
+<div>
+<h5 class="font-bold text-sm">John Doe</h5>
+<p class="text-xs text-slate-500">Verified Purchaser</p>
+</div>
+</div>
+<div class="flex text-amber-400">
+<span class="material-symbols-outlined text-sm fill-1">star</span>
+<span class="material-symbols-outlined text-sm fill-1">star</span>
+<span class="material-symbols-outlined text-sm fill-1">star</span>
+<span class="material-symbols-outlined text-sm fill-1">star</span>
+<span class="material-symbols-outlined text-sm fill-1">star</span>
+</div>
+</div>
+<p class="text-sm font-bold">Excellent brightness and color!</p>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        I've tried many smart bulbs, but the Lumina Pro is by far the best in terms of color accuracy and responsiveness with my smart home hub. Highly recommended.
+                    </p>
+</div>
+<!-- Review Card 2 -->
+<div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 space-y-4">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">SM</div>
+<div>
+<h5 class="font-bold text-sm">Sarah Miller</h5>
+<p class="text-xs text-slate-500">Verified Purchaser</p>
+</div>
+</div>
+<div class="flex text-amber-400">
+<span class="material-symbols-outlined text-sm fill-1">star</span>
+<span class="material-symbols-outlined text-sm fill-1">star</span>
+<span class="material-symbols-outlined text-sm fill-1">star</span>
+<span class="material-symbols-outlined text-sm fill-1">star</span>
+<span class="material-symbols-outlined text-sm">star</span>
+</div>
+</div>
+<p class="text-sm font-bold">Great for home office</p>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        The 5000K setting is perfect for focus. Switching to warm white in the evening is seamless. Setup took less than 2 minutes.
+                    </p>
+</div>
+</div>
+<button class="w-full mt-8 py-4 border-t border-slate-200 dark:border-slate-800 text-slate-500 text-sm font-bold hover:text-primary transition-colors uppercase tracking-widest">View All Reviews</button>
+</section>
+</main>
+<footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-20 py-12">
+<div class="max-w-7xl mx-auto px-6 lg:px-20 grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="space-y-4">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-2xl font-bold">lightbulb</span>
+<h1 class="text-lg font-black tracking-tight text-slate-900 dark:text-slate-100">LuminaLED</h1>
+</div>
+<p class="text-sm text-slate-500">Illuminating your world with smart, energy-efficient solutions since 2015.</p>
+</div>
+<div>
+<h6 class="font-bold mb-4 uppercase text-xs tracking-widest">Products</h6>
+<ul class="space-y-2 text-sm text-slate-500">
+<li><a class="hover:text-primary" href="#">Smart Bulbs</a></li>
+<li><a class="hover:text-primary" href="#">LED Strips</a></li>
+<li><a class="hover:text-primary" href="#">Outdoor Lighting</a></li>
+<li><a class="hover:text-primary" href="#">Accessories</a></li>
+</ul>
+</div>
+<div>
+<h6 class="font-bold mb-4 uppercase text-xs tracking-widest">Support</h6>
+<ul class="space-y-2 text-sm text-slate-500">
+<li><a class="hover:text-primary" href="#">Help Center</a></li>
+<li><a class="hover:text-primary" href="#">Warranty Info</a></li>
+<li><a class="hover:text-primary" href="#">Shipping &amp; Returns</a></li>
+<li><a class="hover:text-primary" href="#">Contact Us</a></li>
+</ul>
+</div>
+<div>
+<h6 class="font-bold mb-4 uppercase text-xs tracking-widest">Newsletter</h6>
+<p class="text-sm text-slate-500 mb-4">Get the latest on sales and new releases.</p>
+<div class="flex gap-2">
+<input class="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm px-4" placeholder="Email address" type="email"/>
+<button class="bg-primary text-white p-2 rounded-lg"><span class="material-symbols-outlined">send</span></button>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-6 lg:px-20 mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+<p>© 2024 LuminaLED Inc. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+<a class="hover:text-primary" href="#">Cookie Settings</a>
+</div>
+</div>
+</footer>
+</body></html>
