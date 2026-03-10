@@ -7,6 +7,7 @@ import ProductFilters from "@/components/product/product-filters";
 import SortDropdown from "@/components/product/sort-dropdown";
 import { getDictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/config";
+import { getWishlistProductIds } from "@/actions/wishlist";
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -77,7 +78,7 @@ export default async function ProductSearchPage({
   }
 
   // Fetch products, count, and categories in parallel
-  const [products, totalCount, categories] = await Promise.all([
+  const [products, totalCount, categories, wishlistIds] = await Promise.all([
     prisma.product.findMany({
       where,
       orderBy: getSortOrder(sort),
@@ -102,6 +103,7 @@ export default async function ProductSearchPage({
         _count: { select: { products: true } },
       },
     }),
+    getWishlistProductIds(),
   ]);
 
   const totalPages = Math.ceil(totalCount / PRODUCTS_PER_PAGE);
@@ -230,12 +232,14 @@ export default async function ProductSearchPage({
                   stock={product.stock}
                   imageUrl={product.images[0]?.url || null}
                   imageAlt={product.images[0]?.alt || null}
+                  isInWishlist={wishlistIds.includes(product.id)}
                   locale={locale}
                   dict={{
                     sale: dict.common.sale,
                     bestSeller: dict.common.bestSeller,
                     outOfStock: dict.common.outOfStock,
                     addToCart: dict.common.addToCart,
+                    addToWishlist: dict.productDetail.addToWishlist,
                   }}
                 />
               ); })}

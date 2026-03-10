@@ -106,6 +106,10 @@
     "orContinueWith": "Hoặc tiếp tục với",
     "google": "Google",
     "apple": "Apple",
+    "fullNameLabel": "Họ và tên",
+    "fullNamePlaceholder": "Nguyễn Văn A",
+    "confirmPasswordLabel": "Xác nhận mật khẩu",
+    "signUpButton": "Tạo tài khoản",
     "enterpriseText": "Cần tài khoản doanh nghiệp cho dự án quy mô lớn?",
     "enterpriseLink": "Liên hệ bộ phận kinh doanh"
   },

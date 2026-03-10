@@ -106,6 +106,10 @@
     "orContinueWith": "Or continue with",
     "google": "Google",
     "apple": "Apple",
+    "fullNameLabel": "Full Name",
+    "fullNamePlaceholder": "John Doe",
+    "confirmPasswordLabel": "Confirm Password",
+    "signUpButton": "Create Account",
     "enterpriseText": "Need a corporate account for large-scale projects?",
     "enterpriseLink": "Contact Enterprise Sales"
   },

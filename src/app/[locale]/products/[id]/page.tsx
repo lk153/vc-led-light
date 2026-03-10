@@ -10,6 +10,8 @@ import ProductAddToCart from "@/components/cart/product-add-to-cart";
 import ProductReviews from "@/components/product/product-reviews";
 import { getDictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/config";
+import { getWishlistProductIds } from "@/actions/wishlist";
+import WishlistButton from "@/components/product/wishlist-button";
 
 type Props = {
   params: Promise<{ locale: string; id: string }>;
@@ -92,6 +94,8 @@ export default async function ProductDetailPage({ params }: Props) {
   }
 
   const t = product.translations[0];
+
+  const wishlistIds = await getWishlistProductIds();
 
   const relatedProducts = await getRelatedProducts(
     product.categoryId,
@@ -241,10 +245,11 @@ export default async function ProductDetailPage({ params }: Props) {
           />
 
           {/* Wishlist Button */}
-          <button className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 py-3 text-sm font-semibold transition-colors hover:border-primary hover:text-primary">
-            <span className="material-symbols-outlined">favorite_border</span>
-            {dict.productDetail.addToWishlist}
-          </button>
+          <WishlistButton
+            productId={product.id}
+            isInWishlist={wishlistIds.includes(product.id)}
+            label={dict.productDetail.addToWishlist}
+          />
 
           {/* Trust Badges */}
           <div className="grid grid-cols-2 gap-4 py-4">

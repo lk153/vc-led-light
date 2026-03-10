@@ -1,33 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { getDictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/config";
+import LogoutButton from "./logout-button";
 
 export const metadata: Metadata = { title: "Profile Dashboard" };
-
-const user = {
-  name: "Alex Johnson",
-  email: "alex.johnson@example.com",
-  phone: "+1 (555) 123-4567",
-  accountType: "Residential Individual",
-  membershipTier: "Gold",
-  rewardPoints: 1250,
-  totalOrders: 24,
-  activeOrders: 2,
-  platinumProgress: 85,
-  image:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuAwGA7Aj2DDYNkPGrhxE0Fqsyotj5TRm6ZB043m4bEpaZAOb123GSknPT8ArKAD0OTtLbjs_en13G2u3b8JuhM5dm8Zh9OvnJOGSFTL0_u6vG3HL6QRbv1T7VZth4NQ0nDPx96pqS7YoL31JSToVQ-6_63bldF5dGPqj0rDGU4gEDK2TVh6PvNHcA9PP_0Pw5MHLGmJgO5u4n0wkJVBLv9l2eOnJw70UhHcK9EKLVA6K6rwxn1rO1vbTN_nmphDCYhhVU87xVng5ECK",
-};
-
-const defaultAddress = {
-  label: "Home Office",
-  street: "123 Neon Way, Suite 400",
-  city: "Lumina Heights",
-  state: "CA",
-  zip: "90210",
-  country: "United States",
-};
 
 export default async function AccountPage({
   params,
@@ -35,15 +15,45 @@ export default async function AccountPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect(`/${locale}/login`);
+  }
+
   const dict = await getDictionary(locale as Locale);
   const t = dict.account.profile;
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    include: {
+      addresses: { orderBy: { isDefault: "desc" } },
+      orders: { select: { id: true, status: true } },
+    },
+  });
+
+  if (!user) {
+    redirect(`/${locale}/login`);
+  }
+
+  const totalOrders = user.orders.length;
+  const activeOrders = user.orders.filter(
+    (o) => o.status === "processing" || o.status === "shipped"
+  ).length;
+  const defaultAddress = user.addresses.find((a) => a.isDefault) || user.addresses[0];
+
+  // Platinum progress: based on reward points (2000 = platinum)
+  const platinumTarget = 2000;
+  const platinumProgress = Math.min(
+    Math.round((user.rewardPoints / platinumTarget) * 100),
+    100
+  );
 
   const sidebarLinks = [
     { icon: "person", label: t.sidebarProfileInfo, href: `/${locale}/account`, active: true },
     { icon: "package_2", label: t.sidebarOrderHistory, href: `/${locale}/account/orders`, active: false },
     { icon: "favorite", label: t.sidebarWishlist, href: `/${locale}/account/wishlist`, active: false },
-    { icon: "location_on", label: t.sidebarSavedAddresses, href: "#", active: false },
-    { icon: "shield_person", label: t.sidebarSecurity, href: "#", active: false },
+    { icon: "location_on", label: t.sidebarSavedAddresses, href: `/${locale}/account/addresses`, active: false },
   ];
 
   return (
@@ -53,16 +63,22 @@ export default async function AccountPage({
         <aside className="w-full lg:w-64 flex flex-col gap-6">
           <div className="bg-white p-6 rounded-xl border border-slate-200">
             <div className="flex items-center gap-4 mb-8">
-              <div className="size-12 rounded-full overflow-hidden border-2 border-primary">
-                <img
-                  className="w-full h-full object-cover"
-                  src={user.image}
-                  alt="Profile avatar"
-                />
+              <div className="size-12 rounded-full overflow-hidden border-2 border-primary bg-primary/10 flex items-center justify-center">
+                {user.image ? (
+                  <img
+                    className="w-full h-full object-cover"
+                    src={user.image}
+                    alt="Profile avatar"
+                  />
+                ) : (
+                  <span className="material-symbols-outlined text-primary text-2xl">
+                    person
+                  </span>
+                )}
               </div>
               <div className="flex flex-col">
                 <h1 className="text-slate-900 text-base font-bold leading-tight">
-                  {user.name}
+                  {user.name || user.email}
                 </h1>
                 <p className="text-primary text-xs font-semibold uppercase tracking-wider">
                   {user.membershipTier} {t.member}
@@ -90,12 +106,7 @@ export default async function AccountPage({
             </nav>
 
             <div className="mt-8 pt-6 border-t border-slate-100">
-              <button className="flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-slate-500 hover:text-red-500 hover:bg-red-50 font-bold transition-all text-sm">
-                <span className="material-symbols-outlined text-[20px]">
-                  logout
-                </span>
-                <span>{dict.common.logout}</span>
-              </button>
+              <LogoutButton locale={locale} label={dict.common.logout} />
             </div>
           </div>
         </aside>
@@ -107,9 +118,7 @@ export default async function AccountPage({
             <h2 className="text-3xl font-black tracking-tight text-slate-900">
               {t.title}
             </h2>
-            <p className="text-slate-500 mt-1">
-              {t.subtitle}
-            </p>
+            <p className="text-slate-500 mt-1">{t.subtitle}</p>
           </div>
 
           {/* Stats Cards */}
@@ -117,39 +126,27 @@ export default async function AccountPage({
             <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm group hover:border-primary transition-all">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                  <span className="material-symbols-outlined">
-                    shopping_bag
-                  </span>
+                  <span className="material-symbols-outlined">shopping_bag</span>
                 </div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                   {t.lifetime}
                 </span>
               </div>
-              <p className="text-slate-500 text-sm font-medium">
-                {t.totalOrders}
-              </p>
-              <p className="text-3xl font-bold text-slate-900 mt-1">
-                {user.totalOrders}
-              </p>
+              <p className="text-slate-500 text-sm font-medium">{t.totalOrders}</p>
+              <p className="text-3xl font-bold text-slate-900 mt-1">{totalOrders}</p>
             </div>
 
             <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm group hover:border-primary transition-all">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-2 bg-orange-100 rounded-lg text-orange-600">
-                  <span className="material-symbols-outlined">
-                    local_shipping
-                  </span>
+                  <span className="material-symbols-outlined">local_shipping</span>
                 </div>
                 <span className="text-[10px] font-bold text-orange-500 uppercase tracking-widest">
                   {t.inTransit}
                 </span>
               </div>
-              <p className="text-slate-500 text-sm font-medium">
-                {t.activeOrders}
-              </p>
-              <p className="text-3xl font-bold text-slate-900 mt-1">
-                {user.activeOrders}
-              </p>
+              <p className="text-slate-500 text-sm font-medium">{t.activeOrders}</p>
+              <p className="text-3xl font-bold text-slate-900 mt-1">{activeOrders}</p>
             </div>
 
             <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm group hover:border-primary transition-all">
@@ -161,9 +158,7 @@ export default async function AccountPage({
                   {t.balance}
                 </span>
               </div>
-              <p className="text-slate-500 text-sm font-medium">
-                {t.rewardPoints}
-              </p>
+              <p className="text-slate-500 text-sm font-medium">{t.rewardPoints}</p>
               <p className="text-3xl font-bold text-slate-900 mt-1">
                 {user.rewardPoints.toLocaleString()}
               </p>
@@ -176,12 +171,6 @@ export default async function AccountPage({
               <h3 className="text-xl font-bold text-slate-900">
                 {t.personalDetails}
               </h3>
-              <button className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-bold hover:bg-primary hover:text-white transition-all">
-                <span className="material-symbols-outlined text-[18px]">
-                  edit
-                </span>
-                <span>{t.editProfile}</span>
-              </button>
             </div>
             <div className="p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
@@ -190,23 +179,21 @@ export default async function AccountPage({
                     {t.fullName}
                   </label>
                   <p className="text-slate-900 font-medium text-lg">
-                    {user.name}
+                    {user.name || "—"}
                   </p>
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                     {t.emailAddress}
                   </label>
-                  <p className="text-slate-900 font-medium text-lg">
-                    {user.email}
-                  </p>
+                  <p className="text-slate-900 font-medium text-lg">{user.email}</p>
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                     {t.phoneNumber}
                   </label>
                   <p className="text-slate-900 font-medium text-lg">
-                    {user.phone}
+                    {user.phone || "—"}
                   </p>
                 </div>
                 <div className="space-y-1">
@@ -214,12 +201,14 @@ export default async function AccountPage({
                     {t.accountType}
                   </label>
                   <div className="flex items-center gap-2">
-                    <p className="text-slate-900 font-medium text-lg">
+                    <p className="text-slate-900 font-medium text-lg capitalize">
                       {user.accountType}
                     </p>
-                    <span className="px-2 py-0.5 bg-green-100 text-green-600 text-[10px] font-black rounded uppercase">
-                      {dict.common.verified}
-                    </span>
+                    {user.emailVerified && (
+                      <span className="px-2 py-0.5 bg-green-100 text-green-600 text-[10px] font-black rounded uppercase">
+                        {dict.common.verified}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -230,17 +219,17 @@ export default async function AccountPage({
                   </label>
                   <div className="bg-slate-50 p-6 rounded-xl border border-dashed border-slate-200">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-bold text-slate-700">
+                      <span className="text-sm font-bold text-slate-700 capitalize">
                         {user.membershipTier} {t.tierProgress}
                       </span>
                       <span className="text-sm font-bold text-primary">
-                        {user.platinumProgress}% {t.toPlatinum}
+                        {platinumProgress}% {t.toPlatinum}
                       </span>
                     </div>
                     <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
                       <div
                         className="bg-primary h-full rounded-full shadow-[0_0_10px_rgba(43,140,238,0.5)]"
-                        style={{ width: `${user.platinumProgress}%` }}
+                        style={{ width: `${platinumProgress}%` }}
                       />
                     </div>
                     <p className="text-xs text-slate-500 mt-4 leading-relaxed">
@@ -252,54 +241,64 @@ export default async function AccountPage({
             </div>
           </div>
 
-          {/* Address & Payment */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-              <h4 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary">
-                  location_on
-                </span>
-                {t.defaultShippingAddress}
-              </h4>
-              <div className="text-slate-600 text-sm space-y-1">
-                <p className="font-bold text-slate-900">
-                  {defaultAddress.label}
-                </p>
-                <p>{defaultAddress.street}</p>
-                <p>
-                  {defaultAddress.city}, {defaultAddress.state}{" "}
-                  {defaultAddress.zip}
-                </p>
-                <p>{defaultAddress.country}</p>
-              </div>
-              <button className="mt-4 text-primary text-xs font-bold hover:underline">
-                {t.manageAddresses}
-              </button>
+          {/* Saved Addresses */}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+            <div className="px-8 py-6 border-b border-slate-100 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">location_on</span>
+                {t.sidebarSavedAddresses}
+              </h3>
             </div>
-
-            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-              <h4 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary">
-                  credit_card
-                </span>
-                {t.defaultPaymentMethod}
-              </h4>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-8 bg-slate-100 rounded flex items-center justify-center border border-slate-200">
-                  <span className="material-symbols-outlined text-slate-400">
-                    payments
+            <div className="p-8">
+              {user.addresses.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {user.addresses.map((address) => (
+                    <div
+                      key={address.id}
+                      className={`p-5 rounded-xl border ${
+                        address.isDefault
+                          ? "border-primary bg-primary/5"
+                          : "border-slate-200"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-sm font-bold text-slate-900">
+                          {address.label}
+                        </span>
+                        {address.isDefault && (
+                          <span className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-black rounded uppercase">
+                            Default
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-slate-600 text-sm space-y-1">
+                        <p className="font-medium text-slate-800">
+                          {address.firstName} {address.lastName}
+                        </p>
+                        <p>{address.street}</p>
+                        {address.apartment && <p>{address.apartment}</p>}
+                        <p>
+                          {address.city}, {address.state} {address.zipCode}
+                        </p>
+                        <p>{address.country}</p>
+                        {address.phone && (
+                          <p className="text-slate-500">{address.phone}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-slate-500">
+                  <span className="material-symbols-outlined text-4xl text-slate-300 mb-2 block">
+                    location_off
                   </span>
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-slate-900">
-                    {t.visaEnding}
+                  <p className="text-sm">
+                    No saved addresses yet. Addresses will appear here after your
+                    first checkout.
                   </p>
-                  <p className="text-xs text-slate-500">{t.expires}</p>
                 </div>
-              </div>
-              <button className="mt-4 text-primary text-xs font-bold hover:underline">
-                {t.managePayments}
-              </button>
+              )}
             </div>
           </div>
         </div>

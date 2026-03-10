@@ -10,9 +10,10 @@ type Props = {
   locale: string;
   dict: Dictionary;
   cartCount?: number;
+  userName?: string | null;
 };
 
-export default function Header({ locale, dict, cartCount = 0 }: Props) {
+export default function Header({ locale, dict, cartCount = 0, userName }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
@@ -93,12 +94,25 @@ export default function Header({ locale, dict, cartCount = 0 }: Props) {
               </span>
             )}
           </Link>
-          <Link
-            href={`${prefix}/account`}
-            className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 hover:bg-primary/10 hover:text-primary transition-all"
-          >
-            <span className="material-symbols-outlined">person</span>
-          </Link>
+          {userName ? (
+            <Link
+              href={`${prefix}/account`}
+              className="flex h-10 items-center gap-2 rounded-lg bg-primary/10 px-3 text-primary hover:bg-primary/20 transition-all"
+              title={userName}
+            >
+              <span className="material-symbols-outlined text-xl">person</span>
+              <span className="hidden sm:inline text-sm font-medium max-w-[100px] truncate">
+                {userName}
+              </span>
+            </Link>
+          ) : (
+            <Link
+              href={`${prefix}/login`}
+              className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 hover:bg-primary/10 hover:text-primary transition-all"
+            >
+              <span className="material-symbols-outlined">person</span>
+            </Link>
+          )}
 
           {/* Mobile menu toggle */}
           <button

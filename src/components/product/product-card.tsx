@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
 import AddToCartButton from "@/components/cart/add-to-cart-button";
+import WishlistButton from "@/components/product/wishlist-button";
 
 type ProductCardProps = {
   productId: string;
@@ -16,12 +17,14 @@ type ProductCardProps = {
   stock: number;
   imageUrl: string | null;
   imageAlt: string | null;
+  isInWishlist?: boolean;
   locale: string;
   dict: {
     sale: string;
     bestSeller: string;
     outOfStock: string;
     addToCart: string;
+    addToWishlist: string;
   };
 };
 
@@ -69,6 +72,7 @@ export default function ProductCard({
   stock,
   imageUrl,
   imageAlt,
+  isInWishlist = false,
   locale,
   dict,
 }: ProductCardProps) {
@@ -118,8 +122,13 @@ export default function ProductCard({
           </span>
         )}
 
-        <div className="absolute top-3 right-3 p-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-slate-900 dark:text-white">
-          <span className="material-symbols-outlined text-xl">favorite</span>
+        <div className={`absolute top-3 right-3 transition-opacity ${isInWishlist ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
+          <WishlistButton
+            productId={productId}
+            isInWishlist={isInWishlist}
+            label={dict.addToWishlist}
+            variant="icon"
+          />
         </div>
       </div>
 

@@ -1,100 +1,67 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { formatCurrency } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/get-dictionary";
+import type { SerializedWishlistProduct } from "./page";
+import { removeFromWishlist } from "@/actions/wishlist";
+import { addToCart } from "@/actions/cart";
 
 type WishlistContentProps = {
   locale: string;
   dict: Dictionary;
+  products: SerializedWishlistProduct[];
 };
 
-interface WishlistProduct {
-  id: string;
-  name: string;
-  price: number;
-  compareAtPrice?: number;
-  rating: number;
-  reviewCount: number;
-  image: string;
-  stockStatus: "in-stock" | "limited" | "out-of-stock";
+function stockBadge(
+  stock: number,
+  labels: { inStock: string; limitedStock: string; outOfStock: string }
+) {
+  if (stock <= 0) {
+    return (
+      <span className="px-3 py-1 bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider rounded-full">
+        {labels.outOfStock}
+      </span>
+    );
+  }
+  if (stock <= 5) {
+    return (
+      <span className="px-3 py-1 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider rounded-full">
+        {labels.limitedStock}
+      </span>
+    );
+  }
+  return (
+    <span className="px-3 py-1 bg-green-500 text-white text-[10px] font-bold uppercase tracking-wider rounded-full">
+      {labels.inStock}
+    </span>
+  );
 }
 
-const initialProducts: WishlistProduct[] = [
-  {
-    id: "1",
-    name: "Neon Linear Pro RGBW Flexible Strip",
-    price: 89.0,
-    compareAtPrice: 112.0,
-    rating: 4.9,
-    reviewCount: 124,
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBdTyw7AwChq8obJCMo6Q2RD6Uly1JyhJwKfJl0J6b_xQ-VSOkLJwnMDxXzvUj2S-L9MwVb2CMZ73v-y36iCdUFiOIrXNFIuSbYa50IWjB5l9YFrs3XoEsMxaH2V9sB7yo5T10XBjODcByPiwQDoYFwlunM4YNHLLO_2qUA_gJgseOybqp04sHtF-p-ZrzsDuWhhlOIJnig9Zk08KXApX93oGhJVneYQ6o6DD_2x7iaQgdc-jfHkq0jlYGPasvN8ci5zlESdMy07lKV",
-    stockStatus: "in-stock",
-  },
-  {
-    id: "2",
-    name: "Smart 4\" Recessed Downlight Tunable White",
-    price: 45.0,
-    rating: 4.8,
-    reviewCount: 89,
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBUy6GMNvStZeR8lcKVNXd7QJUqcJVR0vSD0GiMhbqCKOpunFiI0CbOxPpijnMbTdhNRREwdeoEIkgVU9MaGPcz7rhKgU2jk-AKM6HLBRe7Ef4vBuzBmjBb7pc-6WLJzIEs-W7WEm2tbKIDMKxs7-uyrdT7KRXgSMcfPuTv6GSVsXEYAM02FWAMhzAt2uCHRMKrfhRgKbCecJ4wD8jjsaSdtQszN2UwXMu3YQey-xVQFbOvOj2DTN1TC4HMoyjljKexS8MlbbuCPeVf",
-    stockStatus: "in-stock",
-  },
-  {
-    id: "3",
-    name: "Hyperion Industrial High-Bay LED Pendant",
-    price: 215.0,
-    compareAtPrice: 249.0,
-    rating: 5.0,
-    reviewCount: 42,
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDN5agtbS4zpgcQZrfU-_prBYii1Fd57qb-mA3yLNvsmo8bHIJmGCdvy_asDG7LHLgFsmAsme4P7g9LO9Ij-WVQBDFWvGYUaSNkWfr9EcuJ_oEgAX9ZPsvbOLy_dxlF1g8edOaqoRwE7otshLXaLf05Ty6Uwa9Qf2wVTXD6gQfrPo_s4BB7PYq0tmAksNIw9oDyzmwmaT_G4O9iPQgQlbX_ADEejfptGqK5aI6_hLj7K-eKtMaZBL-ljl2YH_QodXSIF88jKH6fFxjt",
-    stockStatus: "limited",
-  },
-  {
-    id: "4",
-    name: "Eclipse Minimalist Outdoor Wall Sconce",
-    price: 129.0,
-    rating: 4.7,
-    reviewCount: 215,
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuC19QUl3u7X8CUco9Gjgx3WqAh8hZmSy9vhA68FsmOkIxOgyLrLuvYcz0Jmk0uTBsiTkZ-YQTImprFytVou8rM31efpBBcrQAkqSezK-MlgWrq9pM6cmtOWCaZdbrNVnYP3gOs6Er7Bysx04O-Uv6UEYG2-e81Qy-_PEEijlqjMpE2Wd6ekAwurnXx9jXbN0f8XEu8LNsb0-93uIu22LtMZUXoZsFROK0_WszVLhrlLDg3Oe-q8_Eyt_aMDExVciwloVrN4ZTwJbXaJ",
-    stockStatus: "out-of-stock",
-  },
-];
-
-export default function WishlistContent({ locale, dict }: WishlistContentProps) {
-  const [products, setProducts] = useState(initialProducts);
+export default function WishlistContent({
+  locale,
+  dict,
+  products,
+}: WishlistContentProps) {
   const t = dict.account.wishlist;
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
-  const removeItem = (id: string) => {
-    setProducts((prev) => prev.filter((p) => p.id !== id));
-  };
+  function handleRemove(productId: string) {
+    startTransition(async () => {
+      await removeFromWishlist(productId);
+      router.refresh();
+    });
+  }
 
-  function stockBadge(status: WishlistProduct["stockStatus"]) {
-    switch (status) {
-      case "in-stock":
-        return (
-          <span className="px-3 py-1 bg-green-500 text-white text-[10px] font-bold uppercase tracking-wider rounded-full">
-            {dict.common.inStock}
-          </span>
-        );
-      case "limited":
-        return (
-          <span className="px-3 py-1 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider rounded-full">
-            {dict.common.limitedStock}
-          </span>
-        );
-      case "out-of-stock":
-        return (
-          <span className="px-3 py-1 bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider rounded-full">
-            {dict.common.outOfStock}
-          </span>
-        );
-    }
+  function handleMoveToCart(productId: string) {
+    startTransition(async () => {
+      await addToCart(productId, 1);
+      await removeFromWishlist(productId);
+      router.refresh();
+    });
   }
 
   if (products.length === 0) {
@@ -109,9 +76,7 @@ export default function WishlistContent({ locale, dict }: WishlistContentProps) 
           <h2 className="text-2xl font-bold text-slate-900 mb-2">
             {t.emptyTitle}
           </h2>
-          <p className="text-slate-500 mb-8 max-w-sm">
-            {t.emptyMessage}
-          </p>
+          <p className="text-slate-500 mb-8 max-w-sm">{t.emptyMessage}</p>
           <Link
             href={`/${locale}/products`}
             className="px-8 py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
@@ -144,18 +109,6 @@ export default function WishlistContent({ locale, dict }: WishlistContentProps) 
             {t.itemCount.replace("{count}", String(products.length))}
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 px-5 py-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 font-semibold text-sm transition-all shadow-sm">
-            <span className="material-symbols-outlined text-xl">share</span>
-            {t.shareWishlist}
-          </button>
-          <button className="flex items-center gap-2 px-5 py-3 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-sm transition-all shadow-lg shadow-primary/20">
-            <span className="material-symbols-outlined text-xl">
-              add_shopping_cart
-            </span>
-            {t.addAllToCart}
-          </button>
-        </div>
       </div>
 
       {/* Product Grid */}
@@ -165,22 +118,41 @@ export default function WishlistContent({ locale, dict }: WishlistContentProps) 
             key={product.id}
             className="group relative bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300"
           >
-            <div className="relative aspect-square overflow-hidden bg-slate-100">
-              <img
-                alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                src={product.image}
-              />
+            <Link
+              href={`/${locale}/products/${product.slug}`}
+              className="block relative aspect-square overflow-hidden bg-slate-100"
+            >
+              {product.image ? (
+                <img
+                  alt={product.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  src={product.image}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="material-symbols-outlined text-5xl text-slate-300">
+                    image
+                  </span>
+                </div>
+              )}
               <button
-                onClick={() => removeItem(product.id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleRemove(product.productId);
+                }}
+                disabled={isPending}
                 className="absolute top-4 right-4 p-2 bg-white/90 rounded-full text-slate-400 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
               >
                 <span className="material-symbols-outlined">delete</span>
               </button>
               <div className="absolute bottom-4 left-4">
-                {stockBadge(product.stockStatus)}
+                {stockBadge(product.stock, {
+                  inStock: dict.common.inStock,
+                  limitedStock: dict.common.limitedStock,
+                  outOfStock: dict.common.outOfStock,
+                })}
               </div>
-            </div>
+            </Link>
             <div className="p-6">
               <div className="flex items-center gap-1 mb-2">
                 <span
@@ -209,7 +181,7 @@ export default function WishlistContent({ locale, dict }: WishlistContentProps) 
                   </span>
                 )}
               </div>
-              {product.stockStatus === "out-of-stock" ? (
+              {product.stock <= 0 ? (
                 <button className="w-full bg-slate-200 cursor-not-allowed text-slate-500 font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2">
                   <span className="material-symbols-outlined">
                     notifications
@@ -217,7 +189,11 @@ export default function WishlistContent({ locale, dict }: WishlistContentProps) 
                   {t.notifyMe}
                 </button>
               ) : (
-                <button className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2">
+                <button
+                  onClick={() => handleMoveToCart(product.productId)}
+                  disabled={isPending}
+                  className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                >
                   <span className="material-symbols-outlined">
                     shopping_cart
                   </span>
