@@ -8,8 +8,10 @@ const globalForPrisma = globalThis as unknown as {
 
 function createPrismaClient() {
   const connectionString = process.env.DATABASE_URL!;
+  const isProduction = process.env.NODE_ENV === "production";
   const pool = new pg.Pool({
     connectionString,
+    max: isProduction ? 1 : 10,
     ssl: connectionString.includes("sslmode=require")
       ? { rejectUnauthorized: false }
       : undefined,
