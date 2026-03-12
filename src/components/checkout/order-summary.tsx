@@ -3,43 +3,43 @@
 import { formatCurrency } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/get-dictionary";
 
-const sampleItems = [
-  {
-    id: "1",
-    name: "Smart RGB LED Strip (5m)",
-    variant: "Multi-color, Wi-Fi Enabled",
-    price: 24.99,
-    quantity: 2,
-    imageUrl:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBQ5_Na6jDCZ9D9G8q4S_YAQTCcm0ls-5vFdEj2_NmFQjt7ZV48cTcf67ezXFW9xxOtVpFSJAUcm20EezdvWttO8v9nq0ub9_gi4VAu99RNhIC7Z7UFLUHSDyx9Amo1HWPN2Pg83D99mtpourxtgNhx4yfdOdFp3qg61rde7PKPH-hiZIDi_v3ECgBvcsP7mD_jPXY7gB81QSD_O4XHDQp5gUVee9In0BT3aJM6NcNiNByU6xy2G6ByU9EBMBr1LN3U3pkUUJr-eIfA",
-  },
-  {
-    id: "2",
-    name: "Architectural Desk Lamp",
-    variant: "Warm White, Dimmer",
-    price: 85.0,
-    quantity: 1,
-    imageUrl:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDeJAJX8LhXcj-hfP53_lhDLXOB0MTM0gIOlnpq3WdnGQMAq5jiJGMguqIImRuv2-gFwdFQknCyhbv6h3KKNI5493xkoF0vH5tj5lDcANzJvrcgUZ1oaf4lxwRkqWeaEs3QC607hXf89CpwYVgZidkrDVtiPGK1p-lIT2vliXyPy8Y9QvxQX9Wdk7t4KQfogxYYXdXSy4HNBpdxm7KNmiIGXyAPFahU841bucItNuaYxMjdsPDoJau15QIaJ2A6J82y4713-aAvu0gK",
-  },
-];
-
-const subtotal = sampleItems.reduce(
-  (sum, item) => sum + item.price * item.quantity,
-  0
-);
-const shipping = 0;
-const taxRate = 0.08;
-const tax = subtotal * taxRate;
-const total = subtotal + shipping + tax;
+export type OrderSummaryItem = {
+  productId: string;
+  name: string;
+  quantity: number;
+  price: number;
+  imageUrl?: string;
+};
 
 type OrderSummaryProps = {
   showItems?: boolean;
   dict: Dictionary;
+  items?: OrderSummaryItem[];
+  subtotal?: number;
+  shippingCost?: number;
+  tax?: number;
+  total?: number;
 };
 
-export default function OrderSummary({ showItems = true, dict }: OrderSummaryProps) {
+export default function OrderSummary({
+  showItems = true,
+  dict,
+  items,
+  subtotal: subtotalProp,
+  shippingCost: shippingCostProp,
+  tax: taxProp,
+  total: totalProp,
+}: OrderSummaryProps) {
   const t = dict.checkout.orderSummary;
+
+  // Use provided values or fall back to computed sample
+  const displayItems = items ?? [];
+  const subtotal =
+    subtotalProp ??
+    displayItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const shippingCost = shippingCostProp ?? Math.round(subtotal * 0.1);
+  const tax = taxProp ?? Math.round(subtotal * 0.08);
+  const total = totalProp ?? subtotal + shippingCost + tax;
 
   return (
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 sticky top-24">
@@ -47,17 +47,25 @@ export default function OrderSummary({ showItems = true, dict }: OrderSummaryPro
         {t.title}
       </h2>
 
-      {showItems && (
+      {showItems && displayItems.length > 0 && (
         <div className="space-y-4 mb-8">
-          {sampleItems.map((item) => (
-            <div key={item.id} className="flex gap-4">
+          {displayItems.map((item) => (
+            <div key={item.productId} className="flex gap-4">
               <div className="relative h-20 w-20 flex-shrink-0 bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={item.imageUrl}
-                  alt={item.name}
-                  className="h-full w-full object-cover"
-                />
+                {item.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={item.imageUrl}
+                    alt={item.name}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="h-full w-full flex items-center justify-center">
+                    <span className="material-symbols-outlined text-slate-400">
+                      image
+                    </span>
+                  </div>
+                )}
                 <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center">
                   {item.quantity}
                 </span>
@@ -66,9 +74,6 @@ export default function OrderSummary({ showItems = true, dict }: OrderSummaryPro
                 <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
                   {item.name}
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  {item.variant}
-                </p>
                 <p className="text-sm font-bold text-primary mt-1">
                   {formatCurrency(item.price * item.quantity)}
                 </p>
@@ -87,7 +92,9 @@ export default function OrderSummary({ showItems = true, dict }: OrderSummaryPro
         </div>
         <div className="flex justify-between text-slate-600 dark:text-slate-400 text-sm">
           <span>{t.shipping}</span>
-          <span className="text-green-500 font-medium">{t.shippingFree}</span>
+          <span className="font-medium text-slate-900 dark:text-white">
+            {formatCurrency(shippingCost)}
+          </span>
         </div>
         <div className="flex justify-between text-slate-600 dark:text-slate-400 text-sm">
           <span>{t.taxPercent}</span>
@@ -103,7 +110,7 @@ export default function OrderSummary({ showItems = true, dict }: OrderSummaryPro
         </span>
         <div className="text-right">
           <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest block mb-1">
-            USD
+            VND
           </span>
           <span className="text-2xl font-black text-primary">
             {formatCurrency(total)}
@@ -127,13 +134,22 @@ export default function OrderSummary({ showItems = true, dict }: OrderSummaryPro
 
       {/* Trust Badges */}
       <div className="mt-8 flex justify-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all duration-300">
-        <span className="material-symbols-outlined text-2xl" title={t.securePayment}>
+        <span
+          className="material-symbols-outlined text-2xl"
+          title={t.securePayment}
+        >
           verified_user
         </span>
-        <span className="material-symbols-outlined text-2xl" title={t.fastDelivery}>
+        <span
+          className="material-symbols-outlined text-2xl"
+          title={t.fastDelivery}
+        >
           local_shipping
         </span>
-        <span className="material-symbols-outlined text-2xl" title={t.premiumSupport}>
+        <span
+          className="material-symbols-outlined text-2xl"
+          title={t.premiumSupport}
+        >
           support_agent
         </span>
       </div>

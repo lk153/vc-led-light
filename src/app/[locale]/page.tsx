@@ -22,12 +22,35 @@ export default async function HomePage({
     take: 4,
   });
 
-  const categories = [
-    { name: dict.home.categories.indoorLighting, slug: "indoor-lighting", description: dict.home.categories.indoorLightingDesc, icon: "light" },
-    { name: dict.home.categories.smartLighting, slug: "smart-lighting", description: dict.home.categories.smartLightingDesc, icon: "smart_toy" },
-    { name: dict.home.categories.outdoorLighting, slug: "outdoor-lighting", description: dict.home.categories.outdoorLightingDesc, icon: "deck" },
-    { name: dict.home.categories.decorativeLighting, slug: "decorative-lighting", description: dict.home.categories.decorativeLightingDesc, icon: "lightbulb" },
-  ];
+  const dbCategories = await prisma.category.findMany({
+    orderBy: { name: "asc" },
+  });
+
+  const categoryNameMap: Record<string, string> = {
+    "indoor-lighting": dict.home.categories.indoorLighting,
+    "smart-lighting": dict.home.categories.smartLighting,
+    "outdoor-lighting": dict.home.categories.outdoorLighting,
+    "decorative-lighting": dict.home.categories.decorativeLighting,
+  };
+  const categoryDescMap: Record<string, string> = {
+    "indoor-lighting": dict.home.categories.indoorLightingDesc,
+    "smart-lighting": dict.home.categories.smartLightingDesc,
+    "outdoor-lighting": dict.home.categories.outdoorLightingDesc,
+    "decorative-lighting": dict.home.categories.decorativeLightingDesc,
+  };
+  const categoryIconMap: Record<string, string> = {
+    "indoor-lighting": "light",
+    "smart-lighting": "smart_toy",
+    "outdoor-lighting": "deck",
+    "decorative-lighting": "lightbulb",
+  };
+
+  const categories = dbCategories.map((cat) => ({
+    name: categoryNameMap[cat.slug] ?? cat.name,
+    slug: cat.slug,
+    description: categoryDescMap[cat.slug] ?? cat.description ?? "",
+    icon: categoryIconMap[cat.slug] ?? cat.icon ?? "lightbulb",
+  }));
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">

@@ -66,53 +66,40 @@ export default function WishlistContent({
 
   if (products.length === 0) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-            <span className="material-symbols-outlined text-5xl text-slate-300">
-              favorite
-            </span>
-          </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">
-            {t.emptyTitle}
-          </h2>
-          <p className="text-slate-500 mb-8 max-w-sm">{t.emptyMessage}</p>
-          <Link
-            href={`/${locale}/products`}
-            className="px-8 py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
-          >
-            {t.exploreCollections}
-          </Link>
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+          <span className="material-symbols-outlined text-5xl text-slate-300">
+            favorite
+          </span>
         </div>
+        <h2 className="text-2xl font-bold text-slate-900 mb-2">
+          {t.emptyTitle}
+        </h2>
+        <p className="text-slate-500 mb-8 max-w-sm">{t.emptyMessage}</p>
+        <Link
+          href={`/${locale}/products`}
+          className="px-8 py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
+        >
+          {t.exploreCollections}
+        </Link>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <>
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-        <div>
-          <nav className="flex items-center gap-2 text-sm text-slate-500 mb-4">
-            <Link href={`/${locale}`} className="hover:text-primary">
-              {dict.common.home}
-            </Link>
-            <span className="material-symbols-outlined text-sm">
-              chevron_right
-            </span>
-            <span className="text-slate-900 font-medium">{t.title}</span>
-          </nav>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tight">
-            {t.title}
-          </h1>
-          <p className="mt-2 text-slate-500">
-            {t.itemCount.replace("{count}", String(products.length))}
-          </p>
-        </div>
+      <div>
+        <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+          {t.title}
+        </h1>
+        <p className="mt-1 text-slate-500">
+          {t.itemCount.replace("{count}", String(products.length))}
+        </p>
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
           <div
             key={product.id}
@@ -204,6 +191,6 @@ export default function WishlistContent({
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }

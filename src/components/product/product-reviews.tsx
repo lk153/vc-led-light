@@ -1,4 +1,6 @@
 "use client";
+import { useState, useTransition } from "react";
+import { submitReview } from "@/actions/reviews";
 
 interface Review {
   id: string;
@@ -37,6 +39,40 @@ function StarRating({ rating, size = "text-sm" }: { rating: number; size?: strin
   );
 }
 
+function InteractiveStarRating({
+  value,
+  onChange,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+}) {
+  const [hovered, setHovered] = useState(0);
+  return (
+    <div className="flex gap-1">
+      {[1, 2, 3, 4, 5].map((star) => {
+        const filled = star <= (hovered || value);
+        return (
+          <button
+            key={star}
+            type="button"
+            onMouseEnter={() => setHovered(star)}
+            onMouseLeave={() => setHovered(0)}
+            onClick={() => onChange(star)}
+            className="text-amber-400 focus:outline-none"
+          >
+            <span
+              className="material-symbols-outlined text-2xl"
+              style={{ fontVariationSettings: filled ? "'FILL' 1" : "'FILL' 0" }}
+            >
+              star
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function getInitials(name: string | null): string {
   if (!name) return "?";
   return name
@@ -52,13 +88,37 @@ export default function ProductReviews({
   rating,
   reviewCount,
   dict,
+  productId,
 }: {
   reviews: Review[];
   rating: number;
   reviewCount: number;
   dict: ProductReviewsDict;
+  productId: string;
 }) {
   const anonymous = "Anonymous";
+  const [showForm, setShowForm] = useState(false);
+  const [starRating, setStarRating] = useState(0);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    const fd = new FormData(e.currentTarget);
+    fd.set("rating", String(starRating));
+    startTransition(async () => {
+      const result = await submitReview(productId, fd);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        setSuccess(true);
+        setShowForm(false);
+        setStarRating(0);
+      }
+    });
+  }
 
   return (
     <section className="mt-20">
@@ -75,10 +135,81 @@ export default function ProductReviews({
             </div>
           </div>
         </div>
-        <button className="rounded-lg border-2 border-primary px-6 py-3 font-bold text-primary transition-all hover:bg-primary hover:text-white">
+        <button
+          onClick={() => {
+            setShowForm((prev) => !prev);
+            setError("");
+            setSuccess(false);
+          }}
+          className="rounded-lg border-2 border-primary px-6 py-3 font-bold text-primary transition-all hover:bg-primary hover:text-white"
+        >
           {dict.writeReview}
         </button>
       </div>
+
+      {/* Review form */}
+      {showForm && (
+        <div className="mb-10 rounded-xl border border-slate-200 bg-slate-50 p-6">
+          <h4 className="mb-4 text-lg font-bold text-slate-900">Write a Review</h4>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div>
+              <label className="mb-1 block text-xs font-bold uppercase tracking-widest text-slate-400">
+                Rating
+              </label>
+              <InteractiveStarRating value={starRating} onChange={setStarRating} />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-bold uppercase tracking-widest text-slate-400">
+                Title
+              </label>
+              <input
+                name="title"
+                placeholder="Summarize your experience"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-bold uppercase tracking-widest text-slate-400">
+                Review
+              </label>
+              <textarea
+                name="body"
+                rows={4}
+                placeholder="Tell others what you think about this product..."
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+              />
+            </div>
+            {error && <p className="text-sm text-red-500">{error}</p>}
+            <div className="flex gap-3">
+              <button
+                type="submit"
+                disabled={isPending}
+                className="rounded-lg bg-primary px-6 py-2 text-sm font-bold text-white transition-colors hover:bg-primary/90 disabled:opacity-50"
+              >
+                {isPending ? "Submitting…" : "Submit Review"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowForm(false);
+                  setError("");
+                  setStarRating(0);
+                }}
+                className="rounded-lg bg-slate-100 px-6 py-2 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-200"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {success && (
+        <div className="mb-8 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+          <span className="material-symbols-outlined text-sm">check_circle</span>
+          Your review has been submitted. Thank you!
+        </div>
+      )}
 
       {reviews.length > 0 ? (
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">

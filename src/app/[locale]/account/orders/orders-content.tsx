@@ -33,18 +33,17 @@ export default function OrdersContent({ dict, orders }: OrdersContentProps) {
       : orders.filter((o) => o.status === activeFilter);
 
   return (
-    <div className="flex flex-1 justify-center py-8">
-      <div className="flex flex-col max-w-[1024px] flex-1 px-4 md:px-10">
-        {/* Header Section */}
-        <div className="flex flex-col gap-2 mb-8">
-          <h1 className="text-slate-900 text-3xl md:text-4xl font-black leading-tight tracking-tight">
-            {t.pageTitle}
-          </h1>
-          <p className="text-slate-500 text-base">{t.subtitle}</p>
-        </div>
+    <>
+      {/* Header Section */}
+      <div className="flex flex-col gap-2">
+        <h1 className="text-slate-900 text-3xl font-black leading-tight tracking-tight">
+          {t.pageTitle}
+        </h1>
+        <p className="text-slate-500 text-base">{t.subtitle}</p>
+      </div>
 
-        {/* Filter Bar */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
+      {/* Filter Bar */}
+      <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
             <label className="flex flex-col w-full h-12">
               <div className="flex w-full flex-1 items-stretch rounded-xl h-full bg-white border border-slate-200 shadow-sm">
@@ -192,8 +191,7 @@ export default function OrdersContent({ dict, orders }: OrdersContentProps) {
               );
             })
           )}
-        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
 import { updateCartItemQuantity, removeCartItem } from "@/actions/cart";
+import { validatePromoCode } from "@/actions/promo";
 import type { Dictionary } from "@/i18n/get-dictionary";
 
 export interface CartItemData {
@@ -33,14 +34,58 @@ export default function CartContent({
 }) {
   const [items, setItems] = useState<CartItemData[]>(initialItems);
   const [promoCode, setPromoCode] = useState("");
+  const [promoError, setPromoError] = useState<string | null>(null);
+  const [promoSuccess, setPromoSuccess] = useState<string | null>(null);
+  const [appliedDiscount, setAppliedDiscount] = useState<{
+    type: string;
+    value: number;
+    minOrder: number | null;
+    code: string;
+  } | null>(null);
+  const [isApplyingPromo, startPromoTransition] = useTransition();
   const [isPending, startTransition] = useTransition();
 
   const t = dict.cart;
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = subtotal > 0 ? parseFloat((subtotal * SHIPPING_RATE).toFixed(2)) : 0;
-  const tax = subtotal > 0 ? parseFloat((subtotal * TAX_RATE).toFixed(2)) : 0;
-  const total = subtotal + shipping + tax;
+  const discountAmount = appliedDiscount
+    ? appliedDiscount.type === "percentage"
+      ? parseFloat((subtotal * (appliedDiscount.value / 100)).toFixed(2))
+      : Math.min(appliedDiscount.value, subtotal)
+    : 0;
+  const discountedSubtotal = subtotal - discountAmount;
+  const shipping = discountedSubtotal > 0 ? parseFloat((discountedSubtotal * SHIPPING_RATE).toFixed(2)) : 0;
+  const tax = discountedSubtotal > 0 ? parseFloat((discountedSubtotal * TAX_RATE).toFixed(2)) : 0;
+  const total = discountedSubtotal + shipping + tax;
+
+  function handleApplyPromo() {
+    setPromoError(null);
+    setPromoSuccess(null);
+    startPromoTransition(async () => {
+      const result = await validatePromoCode(promoCode);
+      if ("error" in result && result.error) {
+        setPromoError(result.error as string);
+        setAppliedDiscount(null);
+      } else if (result.success && result.discount) {
+        if (result.discount.minOrder && subtotal < result.discount.minOrder) {
+          setPromoError(
+            `Minimum order of ${formatCurrency(result.discount.minOrder)} required`
+          );
+          setAppliedDiscount(null);
+        } else {
+          setAppliedDiscount(result.discount);
+          setPromoSuccess(`Promo code "${result.discount.code}" applied!`);
+          setPromoCode("");
+        }
+      }
+    });
+  }
+
+  function handleRemovePromo() {
+    setAppliedDiscount(null);
+    setPromoSuccess(null);
+    setPromoError(null);
+  }
 
   function handleUpdateQuantity(productId: string, newQuantity: number) {
     if (newQuantity <= 0) {
@@ -204,22 +249,51 @@ export default function CartContent({
             </div>
 
             {/* Promo Code */}
-            <div className="mt-8 flex flex-col items-end gap-4 md:flex-row">
-              <label className="flex flex-1 flex-col">
-                <span className="mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
-                  {t.promoCodeLabel}
-                </span>
-                <input
-                  type="text"
-                  value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value)}
-                  className="flex h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-base text-slate-900 transition-all focus:border-primary focus:ring-1 focus:ring-primary dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
-                  placeholder={t.promoCodePlaceholder}
-                />
-              </label>
-              <button className="h-12 rounded-xl bg-slate-200 px-8 font-bold text-slate-900 transition-colors hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">
-                {dict.common.apply}
-              </button>
+            <div className="mt-8 flex flex-col gap-3">
+              <div className="flex flex-col items-end gap-4 md:flex-row">
+                <label className="flex flex-1 flex-col">
+                  <span className="mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+                    {t.promoCodeLabel}
+                  </span>
+                  <input
+                    type="text"
+                    value={promoCode}
+                    onChange={(e) => {
+                      setPromoCode(e.target.value);
+                      setPromoError(null);
+                    }}
+                    onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
+                    className="flex h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-base text-slate-900 transition-all focus:border-primary focus:ring-1 focus:ring-primary dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+                    placeholder={t.promoCodePlaceholder}
+                    disabled={!!appliedDiscount}
+                  />
+                </label>
+                <button
+                  onClick={handleApplyPromo}
+                  disabled={isApplyingPromo || !!appliedDiscount || !promoCode.trim()}
+                  className="h-12 rounded-xl bg-slate-200 px-8 font-bold text-slate-900 transition-colors hover:bg-slate-300 disabled:opacity-50 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                >
+                  {isApplyingPromo ? "..." : dict.common.apply}
+                </button>
+              </div>
+              {promoError && (
+                <p className="flex items-center gap-1 text-sm text-red-500">
+                  <span className="material-symbols-outlined text-sm">error</span>
+                  {promoError}
+                </p>
+              )}
+              {promoSuccess && (
+                <p className="flex items-center gap-1 text-sm text-green-600">
+                  <span className="material-symbols-outlined text-sm">check_circle</span>
+                  {promoSuccess}
+                  <button
+                    onClick={handleRemovePromo}
+                    className="ml-2 text-slate-500 underline hover:text-red-500"
+                  >
+                    Remove
+                  </button>
+                </p>
+              )}
             </div>
           </div>
 
@@ -235,6 +309,22 @@ export default function CartContent({
                   <span>{dict.common.subtotal}</span>
                   <span className="font-medium">{formatCurrency(subtotal)}</span>
                 </div>
+                {appliedDiscount && discountAmount > 0 && (
+                  <div className="flex items-center justify-between text-green-600">
+                    <span className="flex items-center gap-1 text-sm">
+                      <span className="material-symbols-outlined text-sm">local_offer</span>
+                      {appliedDiscount.code}
+                      <button
+                        onClick={handleRemovePromo}
+                        className="ml-1 text-slate-400 hover:text-red-500 transition-colors"
+                        title="Remove promo"
+                      >
+                        <span className="material-symbols-outlined text-sm">close</span>
+                      </button>
+                    </span>
+                    <span className="font-medium">-{formatCurrency(discountAmount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-slate-600 dark:text-slate-400">
                   <span>{t.estimatedShipping}</span>
                   <span className="font-medium">{formatCurrency(shipping)}</span>

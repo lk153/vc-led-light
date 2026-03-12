@@ -390,6 +390,7 @@ export default async function ProductDetailPage({ params }: Props) {
         rating={rating}
         reviewCount={product.reviewCount}
         dict={dict.productReviews}
+        productId={product.id}
       />
 
       {/* Related Products */}

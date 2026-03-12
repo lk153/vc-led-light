@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SITE_NAME } from "@/lib/constants";
 import type { Dictionary } from "@/i18n/get-dictionary";
+import NewsletterForm from "@/components/layout/newsletter-form";
 
 type Props = {
   locale: string;
@@ -71,16 +72,10 @@ export default function Footer({ locale, dict }: Props) {
             <p className="mb-4 text-sm text-slate-500">
               {dict.footer.newsletterText}
             </p>
-            <div className="flex gap-2">
-              <input
-                type="email"
-                placeholder={dict.footer.emailPlaceholder}
-                className="flex-1 rounded-lg border-none bg-slate-100 px-4 text-sm focus:ring-primary"
-              />
-              <button className="rounded-lg bg-primary p-2 text-white">
-                <span className="material-symbols-outlined">send</span>
-              </button>
-            </div>
+            <NewsletterForm
+              placeholder={dict.footer.emailPlaceholder}
+              successMessage={(dict.footer as Record<string, string>).newsletterSuccess ?? "Thank you for subscribing!"}
+            />
           </div>
         </div>
 

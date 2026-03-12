@@ -1,21 +1,54 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import CheckoutSteps from "@/components/checkout/checkout-steps";
-import OrderSummary from "@/components/checkout/order-summary";
+import OrderSummary, { type OrderSummaryItem } from "@/components/checkout/order-summary";
 import { cn } from "@/lib/utils";
+import { placeOrder } from "@/actions/checkout";
 import type { Dictionary } from "@/i18n/get-dictionary";
 
 type PaymentContentProps = {
   locale: string;
   dict: Dictionary;
+  cartItems: OrderSummaryItem[];
+  subtotal: number;
+  shippingCost: number;
+  tax: number;
+  total: number;
 };
 
-export default function PaymentContent({ locale, dict }: PaymentContentProps) {
+export default function PaymentContent({
+  locale,
+  dict,
+  cartItems,
+  subtotal,
+  shippingCost,
+  tax,
+  total,
+}: PaymentContentProps) {
   const [saveCard, setSaveCard] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const t = dict.checkout.payment;
   const steps = dict.checkout.steps;
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    formData.set("paymentMethod", "card");
+    setError(null);
+    startTransition(async () => {
+      const result = await placeOrder(formData);
+      if (result.error) {
+        setError(result.error);
+      } else if (result.orderNumber) {
+        router.push(`/${locale}/order-confirmation?order=${result.orderNumber}`);
+      }
+    });
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -107,13 +140,14 @@ export default function PaymentContent({ locale, dict }: PaymentContentProps) {
                 </div>
               </div>
 
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Name on Card */}
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
                     {t.nameOnCard}
                   </label>
                   <input
+                    name="cardName"
                     className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800/50 py-3 px-4 focus:border-primary focus:ring-primary outline-none transition-all text-slate-900 dark:text-slate-100"
                     placeholder={t.nameOnCardPlaceholder}
                     type="text"
@@ -127,6 +161,7 @@ export default function PaymentContent({ locale, dict }: PaymentContentProps) {
                   </label>
                   <div className="relative">
                     <input
+                      name="cardNumber"
                       className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800/50 py-3 px-4 focus:border-primary focus:ring-primary outline-none transition-all text-slate-900 dark:text-slate-100"
                       placeholder={t.cardNumberPlaceholder}
                       type="text"
@@ -144,6 +179,7 @@ export default function PaymentContent({ locale, dict }: PaymentContentProps) {
                       {t.expiryDate}
                     </label>
                     <input
+                      name="expiryDate"
                       className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800/50 py-3 px-4 focus:border-primary focus:ring-primary outline-none transition-all text-slate-900 dark:text-slate-100"
                       placeholder={t.expiryPlaceholder}
                       type="text"
@@ -155,6 +191,7 @@ export default function PaymentContent({ locale, dict }: PaymentContentProps) {
                     </label>
                     <div className="relative">
                       <input
+                        name="cvv"
                         className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800/50 py-3 px-4 focus:border-primary focus:ring-primary outline-none transition-all text-slate-900 dark:text-slate-100"
                         placeholder={t.cvvPlaceholder}
                         type="text"
@@ -183,6 +220,13 @@ export default function PaymentContent({ locale, dict }: PaymentContentProps) {
                   </label>
                 </div>
 
+                {/* Error message */}
+                {error && (
+                  <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm font-medium">
+                    {error}
+                  </div>
+                )}
+
                 {/* Actions */}
                 <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-4 justify-between items-center">
                   <Link
@@ -194,13 +238,25 @@ export default function PaymentContent({ locale, dict }: PaymentContentProps) {
                     </span>
                     {t.returnToBilling}
                   </Link>
-                  <Link
-                    href={`/${locale}/order-confirmation`}
-                    className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white font-bold py-4 px-10 rounded-xl shadow-lg shadow-primary/20 transition-all text-lg flex items-center justify-center gap-2"
+                  <button
+                    type="submit"
+                    disabled={isPending}
+                    className="w-full md:w-auto bg-primary hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-4 px-10 rounded-xl shadow-lg shadow-primary/20 transition-all text-lg flex items-center justify-center gap-2"
                   >
-                    {t.placeOrder}
-                    <span className="material-symbols-outlined">lock</span>
-                  </Link>
+                    {isPending ? (
+                      <>
+                        <span className="material-symbols-outlined animate-spin">
+                          progress_activity
+                        </span>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        {t.placeOrder}
+                        <span className="material-symbols-outlined">lock</span>
+                      </>
+                    )}
+                  </button>
                 </div>
               </form>
             </div>
@@ -216,7 +272,14 @@ export default function PaymentContent({ locale, dict }: PaymentContentProps) {
 
         {/* Right Column: Order Summary */}
         <div className="lg:col-span-5">
-          <OrderSummary dict={dict} />
+          <OrderSummary
+            dict={dict}
+            items={cartItems}
+            subtotal={subtotal}
+            shippingCost={shippingCost}
+            tax={tax}
+            total={total}
+          />
 
           {/* Estimated Delivery */}
           <div className="mt-4 p-4 bg-primary/5 rounded-xl border border-primary/10">
@@ -229,7 +292,7 @@ export default function PaymentContent({ locale, dict }: PaymentContentProps) {
                   {t.estimatedDelivery}
                 </p>
                 <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
-                  Thursday, Oct 12th
+                  7 business days
                 </p>
               </div>
             </div>

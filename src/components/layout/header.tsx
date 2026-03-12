@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { SITE_NAME } from "@/lib/constants";
 import type { Dictionary } from "@/i18n/get-dictionary";
 
@@ -15,7 +15,36 @@ type Props = {
 
 export default function Header({ locale, dict, cartCount = 0, userName }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isDark, setIsDark] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  // Sync dark mode from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const shouldBeDark = stored === "dark" || (!stored && prefersDark);
+    setIsDark(shouldBeDark);
+    document.documentElement.classList.toggle("dark", shouldBeDark);
+  }, []);
+
+  function toggleDarkMode() {
+    const next = !isDark;
+    setIsDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+  }
+
+  function handleSearch(e: React.SyntheticEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const q = searchQuery.trim();
+    if (q) {
+      router.push(`/${locale}/products?q=${encodeURIComponent(q)}`);
+    } else {
+      router.push(`/${locale}/products`);
+    }
+  }
 
   const prefix = `/${locale}`;
 
@@ -45,16 +74,20 @@ export default function Header({ locale, dict, cartCount = 0, userName }: Props)
 
           {/* Search */}
           <div className="hidden flex-1 md:block max-w-sm">
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">
-                search
-              </span>
-              <input
-                type="text"
-                placeholder={dict.common.search}
-                className="w-full rounded-lg border-none bg-slate-100 py-2 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-primary focus:outline-none"
-              />
-            </div>
+            <form onSubmit={handleSearch} role="search">
+              <div className="relative">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">
+                  search
+                </span>
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={dict.common.search}
+                  className="w-full rounded-lg border-none bg-slate-100 py-2 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-primary focus:outline-none"
+                />
+              </div>
+            </form>
           </div>
         </div>
 
@@ -82,6 +115,17 @@ export default function Header({ locale, dict, cartCount = 0, userName }: Props)
             <span className="material-symbols-outlined text-lg">translate</span>
             <span className="hidden sm:inline">{locale === "en" ? "VI" : "EN"}</span>
           </Link>
+
+          {/* Dark Mode Toggle */}
+          <button
+            onClick={toggleDarkMode}
+            title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 hover:bg-primary/10 hover:text-primary transition-all"
+          >
+            <span className="material-symbols-outlined text-xl">
+              {isDark ? "light_mode" : "dark_mode"}
+            </span>
+          </button>
 
           <Link
             href={`${prefix}/cart`}

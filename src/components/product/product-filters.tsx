@@ -94,13 +94,13 @@ export default function ProductFilters({
             <div className="flex items-center gap-2">
               <div className="relative flex-1">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">
-                  $
+                  ₫
                 </span>
                 <input
                   name="minPrice"
                   type="number"
                   min="0"
-                  step="0.01"
+                  step="1000"
                   placeholder={dict.minPlaceholder}
                   defaultValue={currentMinPrice || ""}
                   className="w-full pl-7 pr-2 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -109,13 +109,13 @@ export default function ProductFilters({
               <span className="text-slate-400 text-sm">-</span>
               <div className="relative flex-1">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">
-                  $
+                  ₫
                 </span>
                 <input
                   name="maxPrice"
                   type="number"
                   min="0"
-                  step="0.01"
+                  step="1000"
                   placeholder={dict.maxPlaceholder}
                   defaultValue={currentMaxPrice || ""}
                   className="w-full pl-7 pr-2 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"

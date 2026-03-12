@@ -1,42 +1,82 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition, useRef } from "react";
+import { useRouter } from "next/navigation";
 import CheckoutSteps from "@/components/checkout/checkout-steps";
-import OrderSummary from "@/components/checkout/order-summary";
+import OrderSummary, { type OrderSummaryItem } from "@/components/checkout/order-summary";
 import { cn } from "@/lib/utils";
+import { saveShippingInfo } from "@/actions/checkout";
 import type { Dictionary } from "@/i18n/get-dictionary";
+
+type SavedAddress = {
+  id: string;
+  label: string;
+  firstName: string;
+  lastName: string;
+  street: string;
+  apartment: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  phone: string;
+};
 
 type ShippingContentProps = {
   locale: string;
   dict: Dictionary;
+  savedAddresses: SavedAddress[];
+  cartItems: OrderSummaryItem[];
+  subtotal: number;
+  shippingCost: number;
+  tax: number;
+  total: number;
 };
 
-export default function ShippingContent({ locale, dict }: ShippingContentProps) {
+export default function ShippingContent({
+  locale,
+  dict,
+  savedAddresses,
+  cartItems,
+  subtotal,
+  shippingCost,
+  tax,
+  total,
+}: ShippingContentProps) {
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
-  const [useSameForBilling, setUseSameForBilling] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
   const t = dict.checkout.shipping;
 
-  const savedAddresses = [
-    {
-      id: "addr-1",
-      label: t.home,
-      name: "Alex Johnson",
-      street: "742 Evergreen Terrace",
-      city: "Springfield",
-      state: "CA",
-      zip: "90210",
-    },
-    {
-      id: "addr-2",
-      label: t.office,
-      name: "Alex Johnson",
-      street: "1600 Amphitheatre Pkwy",
-      city: "Mountain View",
-      state: "CA",
-      zip: "94043",
-    },
-  ];
+  function selectAddress(addr: SavedAddress) {
+    setSelectedAddress(addr.id);
+    const form = formRef.current;
+    if (!form) return;
+    (form.elements.namedItem("firstName") as HTMLInputElement).value = addr.firstName;
+    (form.elements.namedItem("lastName") as HTMLInputElement).value = addr.lastName;
+    (form.elements.namedItem("street") as HTMLInputElement).value = addr.street;
+    (form.elements.namedItem("apartment") as HTMLInputElement).value = addr.apartment;
+    (form.elements.namedItem("city") as HTMLInputElement).value = addr.city;
+    (form.elements.namedItem("state") as HTMLSelectElement).value = addr.state;
+    (form.elements.namedItem("zipCode") as HTMLInputElement).value = addr.zipCode;
+    (form.elements.namedItem("phone") as HTMLInputElement).value = addr.phone;
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    setError(null);
+    startTransition(async () => {
+      const result = await saveShippingInfo(formData);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        router.push(`/${locale}/checkout/billing`);
+      }
+    });
+  }
 
   return (
     <div className="w-full max-w-[960px] mx-auto px-6 py-8">
@@ -68,44 +108,46 @@ export default function ShippingContent({ locale, dict }: ShippingContentProps) 
           </div>
 
           {/* Saved Addresses */}
-          <div className="mb-8">
-            <h2 className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4">
-              {t.savedAddresses}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {savedAddresses.map((addr) => (
-                <button
-                  key={addr.id}
-                  type="button"
-                  onClick={() => setSelectedAddress(addr.id)}
-                  className={cn(
-                    "text-left p-4 rounded-lg border-2 transition-all",
-                    selectedAddress === addr.id
-                      ? "border-primary bg-primary/5"
-                      : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
-                  )}
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="material-symbols-outlined text-sm text-primary">
-                      {addr.label === t.home ? "home" : "business"}
-                    </span>
-                    <span className="text-xs font-bold text-primary uppercase tracking-wider">
-                      {addr.label}
-                    </span>
-                  </div>
-                  <p className="text-sm font-semibold text-slate-900 dark:text-white">
-                    {addr.name}
-                  </p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
-                    {addr.street}
-                  </p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
-                    {addr.city}, {addr.state} {addr.zip}
-                  </p>
-                </button>
-              ))}
+          {savedAddresses.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4">
+                {t.savedAddresses}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {savedAddresses.map((addr) => (
+                  <button
+                    key={addr.id}
+                    type="button"
+                    onClick={() => selectAddress(addr)}
+                    className={cn(
+                      "text-left p-4 rounded-lg border-2 transition-all",
+                      selectedAddress === addr.id
+                        ? "border-primary bg-primary/5"
+                        : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
+                    )}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="material-symbols-outlined text-sm text-primary">
+                        {addr.label === t.home ? "home" : "business"}
+                      </span>
+                      <span className="text-xs font-bold text-primary uppercase tracking-wider">
+                        {addr.label}
+                      </span>
+                    </div>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                      {addr.firstName} {addr.lastName}
+                    </p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      {addr.street}
+                    </p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      {addr.city}, {addr.state} {addr.zipCode}
+                    </p>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="relative py-4 flex items-center mb-6">
             <div className="flex-grow border-t border-slate-200 dark:border-slate-800" />
@@ -116,12 +158,13 @@ export default function ShippingContent({ locale, dict }: ShippingContentProps) 
           </div>
 
           {/* Form */}
-          <form className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+          <form ref={formRef} onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
             <div>
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                 {t.firstName}
               </label>
               <input
+                name="firstName"
                 className="w-full h-12 px-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"
                 placeholder={t.firstNamePlaceholder}
                 type="text"
@@ -132,6 +175,7 @@ export default function ShippingContent({ locale, dict }: ShippingContentProps) 
                 {t.lastName}
               </label>
               <input
+                name="lastName"
                 className="w-full h-12 px-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"
                 placeholder={t.lastNamePlaceholder}
                 type="text"
@@ -142,6 +186,7 @@ export default function ShippingContent({ locale, dict }: ShippingContentProps) 
                 {t.streetAddress}
               </label>
               <input
+                name="street"
                 className="w-full h-12 px-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"
                 placeholder={t.streetPlaceholder}
                 type="text"
@@ -152,6 +197,7 @@ export default function ShippingContent({ locale, dict }: ShippingContentProps) 
                 {t.apartment}
               </label>
               <input
+                name="apartment"
                 className="w-full h-12 px-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"
                 placeholder={t.apartmentPlaceholder}
                 type="text"
@@ -162,6 +208,7 @@ export default function ShippingContent({ locale, dict }: ShippingContentProps) 
                 {t.city}
               </label>
               <input
+                name="city"
                 className="w-full h-12 px-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"
                 placeholder={t.cityPlaceholder}
                 type="text"
@@ -172,7 +219,10 @@ export default function ShippingContent({ locale, dict }: ShippingContentProps) 
                 <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   {t.state}
                 </label>
-                <select className="w-full h-12 px-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all">
+                <select
+                  name="state"
+                  className="w-full h-12 px-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"
+                >
                   <option value="">{dict.common.select}</option>
                   <option value="CA">{dict.checkout.billing.california}</option>
                   <option value="NY">{dict.checkout.billing.newYork}</option>
@@ -186,6 +236,7 @@ export default function ShippingContent({ locale, dict }: ShippingContentProps) 
                   {t.zipCode}
                 </label>
                 <input
+                  name="zipCode"
                   className="w-full h-12 px-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"
                   placeholder={t.zipPlaceholder}
                   type="text"
@@ -198,9 +249,10 @@ export default function ShippingContent({ locale, dict }: ShippingContentProps) 
               </label>
               <div className="flex w-full items-stretch rounded-lg h-12 overflow-hidden border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-800">
                 <div className="flex items-center justify-center px-4 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 border-r border-slate-200 dark:border-slate-800 text-sm font-medium">
-                  +1
+                  +84
                 </div>
                 <input
+                  name="phone"
                   className="flex-1 px-4 bg-transparent text-slate-900 dark:text-slate-100 border-none focus:ring-0 outline-none"
                   placeholder={t.phonePlaceholder}
                   type="tel"
@@ -208,26 +260,12 @@ export default function ShippingContent({ locale, dict }: ShippingContentProps) 
               </div>
             </div>
 
-            {/* Same for billing checkbox */}
-            <div className="md:col-span-2 py-2">
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <div className="relative flex items-center">
-                  <input
-                    checked={useSameForBilling}
-                    onChange={(e) => setUseSameForBilling(e.target.checked)}
-                    className="peer sr-only"
-                    type="checkbox"
-                  />
-                  <div className="h-6 w-6 rounded border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 peer-checked:bg-primary peer-checked:border-primary transition-all" />
-                  <span className="material-symbols-outlined absolute text-white scale-0 peer-checked:scale-100 transition-transform left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg">
-                    check
-                  </span>
-                </div>
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                  {t.useSameForBilling}
-                </span>
-              </label>
-            </div>
+            {/* Error message */}
+            {error && (
+              <div className="md:col-span-2 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm font-medium">
+                {error}
+              </div>
+            )}
 
             {/* Actions */}
             <div className="md:col-span-2 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row gap-4 justify-between items-center">
@@ -238,16 +276,40 @@ export default function ShippingContent({ locale, dict }: ShippingContentProps) 
                 <span className="material-symbols-outlined">arrow_back</span>
                 {t.returnToCart}
               </Link>
-              <Link
-                href={`/${locale}/checkout/billing`}
-                className="w-full md:w-auto px-10 h-14 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2"
+              <button
+                type="submit"
+                disabled={isPending}
+                className="w-full md:w-auto px-10 h-14 bg-primary hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold rounded-lg shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2"
               >
-                {t.continueToBilling}
-                <span className="material-symbols-outlined">arrow_forward</span>
-              </Link>
+                {isPending ? (
+                  <>
+                    <span className="material-symbols-outlined animate-spin">
+                      progress_activity
+                    </span>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    {t.continueToBilling}
+                    <span className="material-symbols-outlined">arrow_forward</span>
+                  </>
+                )}
+              </button>
             </div>
           </form>
         </div>
+      </div>
+
+      {/* Order Summary */}
+      <div className="mt-8">
+        <OrderSummary
+          dict={dict}
+          items={cartItems}
+          subtotal={subtotal}
+          shippingCost={shippingCost}
+          tax={tax}
+          total={total}
+        />
       </div>
 
       {/* Trust features */}

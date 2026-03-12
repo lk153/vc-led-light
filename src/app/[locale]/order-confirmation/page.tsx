@@ -1,44 +1,35 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatDate } from "@/lib/utils";
 import { getDictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/config";
+import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = { title: "Order Confirmed" };
 
-const orderItems = [
-  {
-    id: "1",
-    name: "Smart RGB LED Strip - 5m",
-    variant: "Warm White",
-    quantity: 2,
-    price: 49.98,
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAclCQFJtVYW8_XCKuwMQPJPlGbXwMORfXHX2lBg6nlS9rb7sdY-CBQbYViaTAP2yAYpmtrrV_uAW07sdPXAuD-wT27DtqfmDTCoA0z7t16q6knDofDPVw891O0RT7TBV8ZfpU-XkQrsk9_OA7D6ptbowH5lskBHd183AP9MIXsNWhlTZFsRx-1gEye02a_AaAxv0SMQnggTGyDPO-_s_pcnZcFqLcFArr3M6hdGG1OhbeOsTXVFhAVpG2AIDEOWFsx-Fpm7AdGy0ve",
-  },
-  {
-    id: "2",
-    name: "Modern Hexagon Wall Panel",
-    variant: "Matte Black",
-    quantity: 1,
-    price: 129.0,
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBOG65pEY7EHODg5PCqOtTwdsB2ayuipF_v7shZwLm76hWoqx7SYyubdwqftx5UQuAzmnsG_lYR7frULQ9oHwf2KkZhdfXvoh2Tm5Zr02uu-C3Wpat356VLCv9ICS7d15Y_sYR4TQ2ZBvTG9EEgDcaEmg17pkl06DyARtDKqLD2ZOn2tvPzzpcC6DIoA_fPGjGQMwxJXLSUMeH-8RnLYYo4E6laTnJoAwCluzQ3ACuVW85jrjRksj6mYc1BAXqALCVZsbcRWWHZvACY",
-  },
-];
-
-const subtotal = 178.98;
-const shipping = 0;
-const total = 178.98;
-
 export default async function OrderConfirmationPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ order?: string }>;
 }) {
   const { locale } = await params;
+  const { order: orderNumber } = await searchParams;
   const dict = await getDictionary(locale as Locale);
   const t = dict.orderConfirmation;
+
+  const order = orderNumber
+    ? await prisma.order.findUnique({
+        where: { orderNumber },
+        include: { items: true },
+      })
+    : null;
+
+  const subtotal = order ? Number(order.subtotal) : 0;
+  const shippingCost = order ? Number(order.shippingCost) : 0;
+  const tax = order ? Number(order.tax) : 0;
+  const total = order ? Number(order.total) : 0;
 
   return (
     <div className="flex flex-col items-center justify-center px-4 py-12">
@@ -73,7 +64,9 @@ export default async function OrderConfirmationPage({
                   {t.orderNumber}
                 </p>
               </div>
-              <p className="text-slate-900 text-2xl font-bold">#LED-982341</p>
+              <p className="text-slate-900 text-2xl font-bold">
+                #{order?.orderNumber ?? "—"}
+              </p>
             </div>
             <div className="flex flex-col gap-2 rounded-xl p-6 bg-slate-50 border border-slate-200">
               <div className="flex items-center gap-2 text-slate-500 mb-1">
@@ -85,7 +78,9 @@ export default async function OrderConfirmationPage({
                 </p>
               </div>
               <p className="text-slate-900 text-2xl font-bold">
-                October 24, 2023
+                {order?.estimatedDelivery
+                  ? formatDate(order.estimatedDelivery)
+                  : "—"}
               </p>
             </div>
           </div>
@@ -95,27 +90,40 @@ export default async function OrderConfirmationPage({
             <h3 className="text-lg font-bold text-slate-900 mb-4">
               {t.orderSummary}
             </h3>
-            <div className="space-y-4">
-              {orderItems.map((item) => (
-                <div key={item.id} className="flex items-center gap-4">
-                  <div className="size-16 bg-slate-100 rounded-lg overflow-hidden border border-slate-200">
-                    <div
-                      className="w-full h-full bg-center bg-cover"
-                      style={{ backgroundImage: `url('${item.image}')` }}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium text-slate-900">{item.name}</h4>
-                    <p className="text-sm text-slate-500">
-                      {t.qty}: {item.quantity} &bull; {item.variant}
+
+            {order ? (
+              <div className="space-y-4">
+                {order.items.map((item) => (
+                  <div key={item.id} className="flex items-center gap-4">
+                    <div className="size-16 bg-slate-100 rounded-lg overflow-hidden border border-slate-200">
+                      {item.imageUrl ? (
+                        <div
+                          className="w-full h-full bg-center bg-cover"
+                          style={{ backgroundImage: `url('${item.imageUrl}')` }}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="material-symbols-outlined text-slate-400">
+                            image
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-medium text-slate-900">{item.name}</h4>
+                      <p className="text-sm text-slate-500">
+                        {t.qty}: {item.quantity}
+                      </p>
+                    </div>
+                    <p className="font-semibold text-slate-900">
+                      {formatCurrency(Number(item.price) * item.quantity)}
                     </p>
                   </div>
-                  <p className="font-semibold text-slate-900">
-                    {formatCurrency(item.price)}
-                  </p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-slate-500 text-sm">No order details found.</p>
+            )}
 
             {/* Totals */}
             <div className="mt-6 pt-6 border-t border-slate-100 space-y-2">
@@ -125,9 +133,13 @@ export default async function OrderConfirmationPage({
               </div>
               <div className="flex justify-between text-slate-500">
                 <span>{t.shipping}</span>
-                <span className="text-green-500 font-medium">
-                  {shipping === 0 ? dict.common.free : formatCurrency(shipping)}
+                <span className="font-medium">
+                  {formatCurrency(shippingCost)}
                 </span>
+              </div>
+              <div className="flex justify-between text-slate-500">
+                <span>Tax (8%)</span>
+                <span>{formatCurrency(tax)}</span>
               </div>
               <div className="flex justify-between text-slate-900 text-xl font-bold pt-2">
                 <span>{t.totalPaid}</span>
