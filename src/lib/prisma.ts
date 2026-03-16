@@ -7,14 +7,18 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient() {
-  const connectionString = process.env.DATABASE_URL!;
+  const rawUrl = process.env.DATABASE_URL!;
+  const needsSsl = rawUrl.includes("sslmode=require") || rawUrl.includes("supabase");
+  // Strip sslmode from URL to prevent pg from enforcing verify-full
+  const connectionString = rawUrl
+    .replace(/[?&]sslmode=require/g, (m) => (m.startsWith("?") ? "?" : ""))
+    .replace(/\?$/, "")
+    .replace(/\?&/, "?");
   const isProduction = process.env.NODE_ENV === "production";
   const pool = new pg.Pool({
     connectionString,
     max: isProduction ? 1 : 10,
-    ssl: connectionString.includes("sslmode=require")
-      ? { rejectUnauthorized: false }
-      : undefined,
+    ssl: needsSsl ? { rejectUnauthorized: false } : undefined,
   });
   const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });

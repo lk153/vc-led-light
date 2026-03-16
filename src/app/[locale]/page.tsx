@@ -11,20 +11,20 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const dict = await getDictionary(locale as Locale);
-
-  const featuredProducts = await prisma.product.findMany({
-    where: { featured: true },
-    include: {
-      images: { take: 1, orderBy: { position: "asc" } },
-      translations: { where: { locale }, take: 1 },
-    },
-    take: 4,
-  });
-
-  const dbCategories = await prisma.category.findMany({
-    orderBy: { name: "asc" },
-  });
+  const [dict, featuredProducts, dbCategories] = await Promise.all([
+    getDictionary(locale as Locale),
+    prisma.product.findMany({
+      where: { featured: true },
+      include: {
+        images: { take: 1, orderBy: { position: "asc" } },
+        translations: { where: { locale }, take: 1 },
+      },
+      take: 4,
+    }),
+    prisma.category.findMany({
+      orderBy: { name: "asc" },
+    }),
+  ]);
 
   const categoryNameMap: Record<string, string> = {
     "indoor-lighting": dict.home.categories.indoorLighting,

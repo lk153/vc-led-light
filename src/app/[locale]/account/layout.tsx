@@ -19,18 +19,19 @@ export default async function AccountLayout({
     redirect(`/${locale}/login`);
   }
 
-  const dict = await getDictionary(locale as Locale);
+  const [dict, user] = await Promise.all([
+    getDictionary(locale as Locale),
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        name: true,
+        email: true,
+        image: true,
+        membershipTier: true,
+      },
+    }),
+  ]);
   const t = dict.account.profile;
-
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: {
-      name: true,
-      email: true,
-      image: true,
-      membershipTier: true,
-    },
-  });
 
   if (!user) {
     redirect(`/${locale}/login`);

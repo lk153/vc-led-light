@@ -21,13 +21,14 @@ export default async function AddressesPage({
     redirect(`/${locale}/login`);
   }
 
-  const dict = await getDictionary(locale as Locale);
+  const [dict, addresses] = await Promise.all([
+    getDictionary(locale as Locale),
+    prisma.address.findMany({
+      where: { userId: session.user.id },
+      orderBy: { isDefault: "desc" },
+    }),
+  ]);
   const t = dict.account.profile;
-
-  const addresses = await prisma.address.findMany({
-    where: { userId: session.user.id },
-    orderBy: { isDefault: "desc" },
-  });
 
   return (
     <>

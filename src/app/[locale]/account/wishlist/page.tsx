@@ -30,19 +30,20 @@ export default async function WishlistPage({
     redirect(`/${locale}/login`);
   }
 
-  const dict = await getDictionary(locale as Locale);
-
-  const wishlistItems = await prisma.wishlistItem.findMany({
-    where: { userId: session.user.id },
-    include: {
-      product: {
-        include: {
-          images: { orderBy: { position: "asc" }, take: 1 },
+  const [dict, wishlistItems] = await Promise.all([
+    getDictionary(locale as Locale),
+    prisma.wishlistItem.findMany({
+      where: { userId: session.user.id },
+      include: {
+        product: {
+          include: {
+            images: { orderBy: { position: "asc" }, take: 1 },
+          },
         },
       },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+      orderBy: { createdAt: "desc" },
+    }),
+  ]);
 
   const products: SerializedWishlistProduct[] = wishlistItems.map((item) => ({
     id: item.id,

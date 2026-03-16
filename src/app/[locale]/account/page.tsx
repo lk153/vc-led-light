@@ -16,21 +16,19 @@ export default async function AccountPage({
 }) {
   const { locale } = await params;
   const session = await auth();
+  if (!session?.user?.id) redirect(`/${locale}/login`);
 
-  if (!session?.user?.id) {
-    redirect(`/${locale}/login`);
-  }
-
-  const dict = await getDictionary(locale as Locale);
+  const [dict, user] = await Promise.all([
+    getDictionary(locale as Locale),
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      include: {
+        addresses: { orderBy: { isDefault: "desc" } },
+        orders: { select: { id: true, status: true } },
+      },
+    }),
+  ]);
   const t = dict.account.profile;
-
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: {
-      addresses: { orderBy: { isDefault: "desc" } },
-      orders: { select: { id: true, status: true } },
-    },
-  });
 
   if (!user) {
     redirect(`/${locale}/login`);

@@ -16,9 +16,8 @@ export default async function ShippingPage({
   if (!session?.user?.id) {
     redirect(`/${locale}/login`);
   }
-  const dict = await getDictionary(locale as Locale);
-
-  const [addresses, cart] = await Promise.all([
+  const [dict, addresses, cart] = await Promise.all([
+    getDictionary(locale as Locale),
     prisma.address.findMany({
       where: { userId: session.user.id },
       orderBy: { isDefault: "desc" },

@@ -31,13 +31,14 @@ export default async function OrderHistoryPage({
     redirect(`/${locale}/login`);
   }
 
-  const dict = await getDictionary(locale as Locale);
-
-  const orders = await prisma.order.findMany({
-    where: { userId: session.user.id },
-    include: { items: true },
-    orderBy: { createdAt: "desc" },
-  });
+  const [dict, orders] = await Promise.all([
+    getDictionary(locale as Locale),
+    prisma.order.findMany({
+      where: { userId: session.user.id },
+      include: { items: true },
+      orderBy: { createdAt: "desc" },
+    }),
+  ]);
 
   const serializedOrders: SerializedOrder[] = orders.map((order) => ({
     id: order.orderNumber,

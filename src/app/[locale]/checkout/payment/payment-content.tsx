@@ -39,6 +39,15 @@ export default function PaymentContent({
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     formData.set("paymentMethod", "card");
+
+    // Only send last 4 digits — never send full card number to server
+    const rawCardNumber = (formData.get("cardNumber") as string) || "";
+    const last4 = rawCardNumber.replace(/\s/g, "").slice(-4) || "0000";
+    formData.delete("cardNumber");
+    formData.delete("cvv");
+    formData.delete("expiryDate");
+    formData.set("cardLast4", last4);
+
     setError(null);
     startTransition(async () => {
       const result = await placeOrder(formData);

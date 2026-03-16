@@ -38,6 +38,7 @@ export async function saveShippingInfo(formData: FormData) {
     path: "/",
     maxAge: 3600,
     httpOnly: true,
+    sameSite: "lax",
   });
   return { success: true };
 }
@@ -54,7 +55,7 @@ export async function saveBillingInfo(formData: FormData) {
     cookieStore.set(
       "checkout_billing",
       JSON.stringify({ sameAsShipping: true }),
-      { path: "/", maxAge: 3600, httpOnly: true }
+      { path: "/", maxAge: 3600, httpOnly: true, sameSite: "lax" }
     );
     return { success: true };
   }
@@ -87,6 +88,7 @@ export async function saveBillingInfo(formData: FormData) {
     path: "/",
     maxAge: 3600,
     httpOnly: true,
+    sameSite: "lax",
   });
   return { success: true };
 }
@@ -118,10 +120,9 @@ export async function placeOrder(formData: FormData) {
   // Generate order number
   const orderNumber = `LED-${Date.now().toString(36).toUpperCase()}`;
 
-  // Determine payment info from form
+  // Determine payment info from form (only last 4 digits sent from client)
   const paymentMethod = (formData.get("paymentMethod") as string) || "card";
-  const cardLast4 =
-    ((formData.get("cardNumber") as string) || "").replace(/\s/g, "").slice(-4) || "0000";
+  const cardLast4 = (formData.get("cardLast4") as string) || "0000";
 
   // Estimated delivery: 7 days from now
   const estimatedDelivery = new Date();

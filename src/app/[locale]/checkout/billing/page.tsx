@@ -15,9 +15,10 @@ export default async function BillingPage({
   if (!session?.user?.id) {
     redirect(`/${locale}/login`);
   }
-  const dict = await getDictionary(locale as Locale);
-
-  const cart = await getCart();
+  const [dict, cart] = await Promise.all([
+    getDictionary(locale as Locale),
+    getCart(),
+  ]);
   const subtotal = cart.items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0

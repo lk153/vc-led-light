@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,7 +18,8 @@ type Props = {
   params: Promise<{ locale: string; id: string }>;
 };
 
-async function getProduct(slug: string, locale: string) {
+// React cache deduplicates this between generateMetadata and page render
+const getProduct = cache(async (slug: string, locale: string) => {
   return prisma.product.findUnique({
     where: { slug },
     include: {
@@ -31,7 +33,7 @@ async function getProduct(slug: string, locale: string) {
       },
     },
   });
-}
+});
 
 async function getRelatedProducts(categoryId: string, excludeSlug: string, locale: string) {
   return prisma.product.findMany({
@@ -86,8 +88,11 @@ function StarRating({ rating }: { rating: number }) {
 
 export default async function ProductDetailPage({ params }: Props) {
   const { locale, id: slug } = await params;
-  const dict = await getDictionary(locale as Locale);
-  const product = await getProduct(slug, locale);
+  const [dict, product, wishlistIds] = await Promise.all([
+    getDictionary(locale as Locale),
+    getProduct(slug, locale),
+    getWishlistProductIds(),
+  ]);
 
   if (!product) {
     notFound();
@@ -95,13 +100,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const t = product.translations[0];
 
-  const wishlistIds = await getWishlistProductIds();
-
-  const relatedProducts = await getRelatedProducts(
-    product.categoryId,
-    product.slug,
-    locale
-  );
+  const relatedProducts = await getRelatedProducts(product.categoryId, product.slug, locale);
 
   const price = Number(product.price);
   const compareAtPrice = product.compareAtPrice

@@ -81,6 +81,8 @@ model Address {
   isDefault  Boolean @default(false)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model Category {
@@ -122,6 +124,10 @@ model Product {
   wishlistItems WishlistItem[]
   cartItems     CartItem[]
   orderItems    OrderItem[]
+
+  @@index([categoryId])
+  @@index([featured])
+  @@index([slug])
 }
 
 model ProductTranslation {
@@ -145,6 +151,8 @@ model ProductImage {
   position  Int     @default(0)
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
 }
 
 model Cart {
@@ -166,6 +174,7 @@ model CartItem {
   product Product @relation(fields: [productId], references: [id])
 
   @@unique([cartId, productId])
+  @@index([productId])
 }
 
 model Order {
@@ -200,6 +209,9 @@ model Order {
 
   user  User        @relation(fields: [userId], references: [id])
   items OrderItem[]
+
+  @@index([userId])
+  @@index([createdAt])
 }
 
 model OrderItem {
@@ -213,6 +225,8 @@ model OrderItem {
 
   order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
 }
 
 model WishlistItem {
@@ -225,6 +239,7 @@ model WishlistItem {
   product Product @relation(fields: [productId], references: [id])
 
   @@unique([userId, productId])
+  @@index([productId])
 }
 
 model Review {
@@ -241,6 +256,7 @@ model Review {
   product Product @relation(fields: [productId], references: [id])
 
   @@unique([userId, productId])
+  @@index([productId])
 }
 
 model PromoCode {

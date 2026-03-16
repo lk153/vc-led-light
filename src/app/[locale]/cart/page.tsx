@@ -9,8 +9,10 @@ export default async function CartPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const dict = await getDictionary(locale as Locale);
-  const cart = await getCart();
+  const [dict, cart] = await Promise.all([
+    getDictionary(locale as Locale),
+    getCart(),
+  ]);
 
   return <CartContent locale={locale} dict={dict} initialItems={cart.items} />;
 }

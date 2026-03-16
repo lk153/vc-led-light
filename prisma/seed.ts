@@ -1,10 +1,21 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import pg from "pg";
 import { hashSync } from "bcryptjs";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+const rawUrl = process.env.DATABASE_URL!;
+const needsSsl = rawUrl.includes("sslmode=require") || rawUrl.includes("supabase");
+// Strip sslmode from URL to prevent pg from enforcing verify-full
+const connectionString = rawUrl.replace(/[?&]sslmode=require/g, (match) =>
+  match.startsWith("?") ? "?" : ""
+).replace(/\?$/, "").replace(/\?&/, "?");
+const pool = new pg.Pool({
+  connectionString,
+  ssl: needsSsl ? { rejectUnauthorized: false } : undefined,
+});
+const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
