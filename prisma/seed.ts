@@ -366,7 +366,7 @@ async function main() {
   console.log(`  User: ${user.email}`);
 
   // Demo address
-  await prisma.address.upsert({
+  const address = await prisma.address.upsert({
     where: { id: "demo-address-1" },
     update: {},
     create: {
@@ -385,9 +385,10 @@ async function main() {
       isDefault: true,
     },
   });
+  console.log(`  Address: ${address.id}`);
 
   // Promo code
-  await prisma.promoCode.upsert({
+  const promoCode = await prisma.promoCode.upsert({
     where: { code: "WELCOME10" },
     update: {},
     create: {
@@ -400,6 +401,7 @@ async function main() {
       expiresAt: new Date("2027-12-31"),
     },
   });
+  console.log(`  Promo Code: ${promoCode.code}`);
 
   console.log("Seed completed!");
 }

@@ -30,4 +30,7 @@ export default defineConfig({
   datasource: {
     url: getUrl(),
   },
+  migrations: {
+    seed: "npx tsx prisma/seed.ts",
+  },
 });
