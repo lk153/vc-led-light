@@ -17,7 +17,10 @@ function loadEnvFile(filePath: string): Record<string, string> {
   }
 }
 
-const envLocal = loadEnvFile(path.join(__dirname, "..", ".env.local"));
+const envLocal = {
+  ...loadEnvFile(path.join(process.cwd(), ".env.local")),
+  ...loadEnvFile(path.join(__dirname, "..", ".env.local")),
+};
 
 function getUrl(): string {
   const raw = envLocal.DIRECT_URL || envLocal.DATABASE_URL || process.env.DIRECT_URL || process.env.DATABASE_URL || "postgresql://luminaled:luminaled@localhost:5433/luminaled";

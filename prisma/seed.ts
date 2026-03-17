@@ -352,13 +352,14 @@ async function main() {
 
   // Demo user
   const user = await prisma.user.upsert({
-    where: { email: "demo@luminaled.com" },
+    where: { email: "admin@admin.com" },
     update: {},
     create: {
-      name: "John Smith",
-      email: "demo@luminaled.com",
+      name: "Admin Test",
+      email: "admin@admin.com",
       passwordHash: hashSync("password123", 10),
       phone: "+1 (555) 123-4567",
+      role: "admin",
       membershipTier: "gold",
       rewardPoints: 2450,
     },

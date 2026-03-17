@@ -14,6 +14,7 @@ model User {
   passwordHash  String?
   phone         String?
   image         String?
+  role          String    @default("user")
   accountType   String    @default("individual")
   membershipTier String   @default("gold")
   rewardPoints  Int       @default(0)
