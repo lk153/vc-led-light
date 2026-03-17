@@ -18,12 +18,33 @@ export default async function AdminUsersPage({
     id: u.id,
     name: u.name || "N/A",
     email: u.email,
+    phone: u.phone || null,
     role: u.role,
     accountType: u.accountType,
     membershipTier: u.membershipTier,
     rewardPoints: u.rewardPoints,
     createdAt: u.createdAt.toISOString(),
     orderCount: u._count.orders,
+    wishlistCount: u._count.wishlistItems,
+    reviewCount: u._count.reviews,
+    addresses: u.addresses.map((a) => ({
+      label: a.label,
+      firstName: a.firstName,
+      lastName: a.lastName,
+      street: a.street,
+      city: a.city,
+      state: a.state,
+      zipCode: a.zipCode,
+      country: a.country,
+      phone: a.phone,
+      isDefault: a.isDefault,
+    })),
+    recentOrders: u.orders.map((o) => ({
+      orderNumber: o.orderNumber,
+      status: o.status,
+      total: Number(o.total),
+      createdAt: o.createdAt.toISOString(),
+    })),
   }));
 
   return <AdminUsers dict={dict} users={serialized} />;

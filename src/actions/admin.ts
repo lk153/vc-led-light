@@ -46,7 +46,21 @@ export async function updateOrderStatus(orderId: string, status: string) {
 export async function getAdminUsers() {
   await requireAdmin();
   return prisma.user.findMany({
-    include: { _count: { select: { orders: true } } },
+    include: {
+      _count: { select: { orders: true, wishlistItems: true, reviews: true } },
+      addresses: { orderBy: { isDefault: "desc" } },
+      orders: {
+        orderBy: { createdAt: "desc" },
+        take: 5,
+        select: {
+          id: true,
+          orderNumber: true,
+          status: true,
+          total: true,
+          createdAt: true,
+        },
+      },
+    },
     orderBy: { createdAt: "desc" },
   });
 }

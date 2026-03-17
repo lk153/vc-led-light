@@ -61,13 +61,14 @@ export default function AdminCatalog({
         <div className="text-center py-16 text-slate-400">{t.noProducts}</div>
       ) : (
         <div className="space-y-4">
-          {products.map((product) => (
+          {products.map((product, idx) => (
             <div
               key={product.id}
-              className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden"
+              className={`rounded-xl border border-slate-200 shadow-sm overflow-hidden ${idx % 2 === 0 ? "bg-white" : "bg-slate-100"}`}
             >
               {editingId === product.id ? (
                 <ProductEditForm
+                  key={product.id}
                   product={product}
                   categories={categories}
                   t={t}
@@ -180,30 +181,17 @@ function ProductEditForm({
           defaultValue={product.compareAtPrice ? String(product.compareAtPrice) : ""}
         />
         <Field label={t.stock} name="stock" type="number" defaultValue={String(product.stock)} />
-        <div>
-          <label className="block text-xs font-semibold text-slate-600 mb-1">{t.category}</label>
-          <select
-            name="categoryId"
-            defaultValue={product.categoryId}
-            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary"
-          >
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
-            ))}
-          </select>
-        </div>
-        <div className="flex items-end pb-1">
-          <label className="flex items-center gap-2 text-sm text-slate-700">
-            <input
-              type="checkbox"
-              name="featured"
-              value="true"
-              defaultChecked={product.featured}
-              className="rounded border-slate-300"
-            />
-            {t.featured}
-          </label>
-        </div>
+        <SelectField
+          label={t.category}
+          name="categoryId"
+          defaultValue={product.categoryId}
+          options={categories.map((c) => ({ value: c.id, label: c.name }))}
+        />
+        <CheckboxField
+          label={t.featured}
+          name="featured"
+          defaultChecked={product.featured}
+        />
         <Field label={t.wattage} name="wattage" type="number" defaultValue={product.wattage != null ? String(product.wattage) : ""} />
         <Field label={t.lumens} name="lumens" type="number" defaultValue={product.lumens != null ? String(product.lumens) : ""} />
         <Field label={t.colorTemperature} name="colorTemperature" defaultValue={product.colorTemperature} />
@@ -213,15 +201,7 @@ function ProductEditForm({
 
       <Field label={t.shortDescription} name="shortDescription" defaultValue={product.shortDescription} />
 
-      <div>
-        <label className="block text-xs font-semibold text-slate-600 mb-1">{t.description}</label>
-        <textarea
-          name="description"
-          defaultValue={product.description}
-          rows={3}
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary"
-        />
-      </div>
+      <TextareaField label={t.description} name="description" defaultValue={product.description} />
 
       <div className="flex gap-3 pt-2">
         <button
@@ -254,15 +234,97 @@ function Field({
   type?: string;
   defaultValue: string;
 }) {
+  const [value, setValue] = useState(defaultValue ?? "");
   return (
     <div>
       <label className="block text-xs font-semibold text-slate-600 mb-1">{label}</label>
       <input
         type={type}
         name={name}
-        defaultValue={defaultValue}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
         step={type === "number" ? "any" : undefined}
-        className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary"
+        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+      />
+    </div>
+  );
+}
+
+function SelectField({
+  label,
+  name,
+  defaultValue,
+  options,
+}: {
+  label: string;
+  name: string;
+  defaultValue: string;
+  options: { value: string; label: string }[];
+}) {
+  const [value, setValue] = useState(defaultValue);
+  return (
+    <div>
+      <label className="block text-xs font-semibold text-slate-600 mb-1">{label}</label>
+      <select
+        name={name}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>{o.label}</option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+function CheckboxField({
+  label,
+  name,
+  defaultChecked,
+}: {
+  label: string;
+  name: string;
+  defaultChecked: boolean;
+}) {
+  const [checked, setChecked] = useState(defaultChecked);
+  return (
+    <div className="flex items-end pb-1">
+      <label className="flex items-center gap-2 text-sm text-slate-700">
+        <input
+          type="checkbox"
+          name={name}
+          value="true"
+          checked={checked}
+          onChange={(e) => setChecked(e.target.checked)}
+          className="rounded border-slate-300"
+        />
+        {label}
+      </label>
+    </div>
+  );
+}
+
+function TextareaField({
+  label,
+  name,
+  defaultValue,
+}: {
+  label: string;
+  name: string;
+  defaultValue: string;
+}) {
+  const [value, setValue] = useState(defaultValue ?? "");
+  return (
+    <div>
+      <label className="block text-xs font-semibold text-slate-600 mb-1">{label}</label>
+      <textarea
+        name={name}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        rows={3}
+        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary"
       />
     </div>
   );

@@ -17,7 +17,7 @@ export default function ProductGallery({ images }: { images: ProductImage[] }) {
 
   if (images.length === 0) {
     return (
-      <div className="aspect-square rounded-xl border border-slate-200 bg-white flex items-center justify-center">
+      <div className="aspect-square rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-center">
         <span className="material-symbols-outlined text-6xl text-slate-300">
           image
         </span>
@@ -28,7 +28,7 @@ export default function ProductGallery({ images }: { images: ProductImage[] }) {
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="group relative aspect-square overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <div className="group relative aspect-square overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <Image
           src={mainImage.url}
           alt={mainImage.alt ?? "Product image"}

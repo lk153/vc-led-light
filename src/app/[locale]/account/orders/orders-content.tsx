@@ -37,22 +37,22 @@ export default function OrdersContent({ dict, orders }: OrdersContentProps) {
     <>
       {/* Header Section */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-slate-900 text-3xl font-black leading-tight tracking-tight">
+        <h1 className="text-slate-900 dark:text-white text-3xl font-black leading-tight tracking-tight">
           {t.pageTitle}
         </h1>
-        <p className="text-slate-500 text-base">{t.subtitle}</p>
+        <p className="text-slate-500 dark:text-slate-400 text-base">{t.subtitle}</p>
       </div>
 
       {/* Filter Bar */}
       <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
             <label className="flex flex-col w-full h-12">
-              <div className="flex w-full flex-1 items-stretch rounded-xl h-full bg-white border border-slate-200 shadow-sm">
+              <div className="flex w-full flex-1 items-stretch rounded-xl h-full bg-white border border-slate-200 shadow-sm dark:bg-slate-900 dark:border-slate-800">
                 <div className="text-slate-400 flex items-center justify-center pl-4">
                   <span className="material-symbols-outlined">search</span>
                 </div>
                 <input
-                  className="flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 focus:outline-none text-slate-900 placeholder:text-slate-400 px-4 text-base"
+                  className="flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 focus:outline-none text-slate-900 dark:text-white placeholder:text-slate-400 px-4 text-base"
                   placeholder={t.searchPlaceholder}
                 />
               </div>
@@ -66,7 +66,7 @@ export default function OrdersContent({ dict, orders }: OrdersContentProps) {
                 className={
                   activeFilter === option.value
                     ? "flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary text-white px-5 font-medium shadow-md shadow-primary/20"
-                    : "flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white border border-slate-200 text-slate-700 px-5 font-medium hover:bg-slate-50 transition-colors"
+                    : "flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white border border-slate-200 text-slate-700 px-5 font-medium hover:bg-slate-50 transition-colors dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300"
                 }
               >
                 <span className="text-sm">{option.label}</span>
@@ -98,41 +98,41 @@ export default function OrdersContent({ dict, orders }: OrdersContentProps) {
               return (
                 <div
                   key={order.id}
-                  className="flex flex-col rounded-xl bg-white border border-slate-200 shadow-sm overflow-hidden"
+                  className="flex flex-col rounded-xl bg-white border border-slate-200 shadow-sm overflow-hidden dark:bg-slate-900 dark:border-slate-800"
                 >
                   {/* Order Header */}
-                  <div className="bg-slate-50 p-4 border-b border-slate-200 flex flex-wrap justify-between items-center gap-4">
+                  <div className="bg-slate-50 dark:bg-slate-800 p-4 border-b border-slate-200 dark:border-slate-700 flex flex-wrap justify-between items-center gap-4">
                     <div className="flex gap-8">
                       <div>
-                        <p className="text-slate-500 text-xs uppercase font-bold tracking-wider">
+                        <p className="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">
                           {t.orderPlaced}
                         </p>
-                        <p className="text-slate-900 text-sm font-semibold">
+                        <p className="text-slate-900 dark:text-white text-sm font-semibold">
                           {formatDate(order.date)}
                         </p>
                       </div>
                       <div>
-                        <p className="text-slate-500 text-xs uppercase font-bold tracking-wider">
+                        <p className="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">
                           {t.total}
                         </p>
-                        <p className="text-slate-900 text-sm font-semibold">
+                        <p className="text-slate-900 dark:text-white text-sm font-semibold">
                           {formatCurrency(order.total)}
                         </p>
                       </div>
                       <div className="hidden sm:block">
-                        <p className="text-slate-500 text-xs uppercase font-bold tracking-wider">
+                        <p className="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">
                           {t.shipTo}
                         </p>
-                        <p className="text-slate-900 text-sm font-semibold">
+                        <p className="text-slate-900 dark:text-white text-sm font-semibold">
                           {order.shipTo}
                         </p>
                       </div>
                     </div>
                     <div className="flex flex-col items-end">
-                      <p className="text-slate-500 text-xs uppercase font-bold tracking-wider">
+                      <p className="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">
                         {t.orderNumber}
                       </p>
-                      <p className="text-slate-900 text-sm font-semibold">
+                      <p className="text-slate-900 dark:text-white text-sm font-semibold">
                         {order.id}
                       </p>
                     </div>
@@ -142,11 +142,11 @@ export default function OrdersContent({ dict, orders }: OrdersContentProps) {
                   <div className="p-6 flex flex-col md:flex-row gap-6">
                     {firstItem?.imageUrl ? (
                       <div
-                        className="w-full md:w-32 h-32 shrink-0 bg-slate-100 rounded-lg bg-center bg-no-repeat bg-cover"
+                        className="w-full md:w-32 h-32 shrink-0 bg-slate-100 dark:bg-slate-800 rounded-lg bg-center bg-no-repeat bg-cover"
                         style={{ backgroundImage: `url("${firstItem.imageUrl}")` }}
                       />
                     ) : (
-                      <div className="w-full md:w-32 h-32 shrink-0 bg-slate-100 rounded-lg flex items-center justify-center">
+                      <div className="w-full md:w-32 h-32 shrink-0 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center">
                         <span className="material-symbols-outlined text-4xl text-slate-300">
                           image
                         </span>
@@ -161,8 +161,8 @@ export default function OrdersContent({ dict, orders }: OrdersContentProps) {
                           {t[order.status]}
                         </p>
                       </div>
-                      <p className="text-slate-700 font-medium">{itemNames}</p>
-                      <p className="text-slate-500 text-sm">
+                      <p className="text-slate-700 dark:text-slate-300 font-medium">{itemNames}</p>
+                      <p className="text-slate-500 dark:text-slate-400 text-sm">
                         {order.items.length} item{order.items.length !== 1 ? "s" : ""}
                       </p>
                       <div className="flex flex-wrap gap-2 mt-4">
@@ -179,7 +179,7 @@ export default function OrdersContent({ dict, orders }: OrdersContentProps) {
                           onClick={() =>
                             setExpandedOrder(expandedOrder === order.id ? null : order.id)
                           }
-                          className="flex items-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-700 text-sm font-bold rounded-lg hover:bg-slate-200 transition-colors"
+                          className="flex items-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-700 text-sm font-bold rounded-lg hover:bg-slate-200 transition-colors dark:bg-slate-800 dark:text-slate-300"
                         >
                           {expandedOrder === order.id ? t.hideDetails : t.viewDetails}
                           <span
@@ -195,38 +195,38 @@ export default function OrdersContent({ dict, orders }: OrdersContentProps) {
 
                   {/* Expanded Details */}
                   {expandedOrder === order.id && (
-                    <div className="border-t border-slate-200 bg-slate-50/50">
+                    <div className="border-t border-slate-200 bg-slate-50/50 dark:border-slate-800 dark:bg-slate-800/50">
                       <div className="p-6">
-                        <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">
+                        <h4 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">
                           {t.orderItems}
                         </h4>
                         <div className="space-y-3">
                           {order.items.map((item, idx) => (
                             <div
                               key={idx}
-                              className="flex items-center gap-4 bg-white rounded-lg p-3 border border-slate-100"
+                              className="flex items-center gap-4 bg-white rounded-lg p-3 border border-slate-100 dark:bg-slate-900 dark:border-slate-800"
                             >
                               {item.imageUrl ? (
                                 <div
-                                  className="w-16 h-16 shrink-0 rounded-lg bg-slate-100 bg-center bg-no-repeat bg-cover"
+                                  className="w-16 h-16 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 bg-center bg-no-repeat bg-cover"
                                   style={{ backgroundImage: `url("${item.imageUrl}")` }}
                                 />
                               ) : (
-                                <div className="w-16 h-16 shrink-0 rounded-lg bg-slate-100 flex items-center justify-center">
+                                <div className="w-16 h-16 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                                   <span className="material-symbols-outlined text-2xl text-slate-300">
                                     image
                                   </span>
                                 </div>
                               )}
                               <div className="flex-1 min-w-0">
-                                <p className="text-slate-900 font-semibold text-sm truncate">
+                                <p className="text-slate-900 dark:text-white font-semibold text-sm truncate">
                                   {item.name}
                                 </p>
-                                <p className="text-slate-500 text-xs mt-0.5">
+                                <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
                                   {t.quantity}: {item.quantity}
                                 </p>
                               </div>
-                              <p className="text-slate-900 font-bold text-sm shrink-0">
+                              <p className="text-slate-900 dark:text-white font-bold text-sm shrink-0">
                                 {formatCurrency(item.price * item.quantity)}
                               </p>
                             </div>
@@ -234,11 +234,11 @@ export default function OrdersContent({ dict, orders }: OrdersContentProps) {
                         </div>
 
                         {/* Order Summary */}
-                        <div className="mt-4 pt-4 border-t border-slate-200 flex justify-end">
+                        <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 flex justify-end">
                           <div className="w-64 space-y-1.5 text-sm">
-                            <div className="flex justify-between text-slate-500">
+                            <div className="flex justify-between text-slate-500 dark:text-slate-400">
                               <span>{t.total}</span>
-                              <span className="font-bold text-slate-900 text-base">
+                              <span className="font-bold text-slate-900 dark:text-white text-base">
                                 {formatCurrency(order.total)}
                               </span>
                             </div>

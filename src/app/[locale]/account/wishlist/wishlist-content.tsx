@@ -67,15 +67,15 @@ export default function WishlistContent({
   if (products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+        <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
           <span className="material-symbols-outlined text-5xl text-slate-300">
             favorite
           </span>
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
           {t.emptyTitle}
         </h2>
-        <p className="text-slate-500 mb-8 max-w-sm">{t.emptyMessage}</p>
+        <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-sm">{t.emptyMessage}</p>
         <Link
           href={`/${locale}/products`}
           className="px-8 py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
@@ -90,10 +90,10 @@ export default function WishlistContent({
     <>
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
           {t.title}
         </h1>
-        <p className="mt-1 text-slate-500">
+        <p className="mt-1 text-slate-500 dark:text-slate-400">
           {t.itemCount.replace("{count}", String(products.length))}
         </p>
       </div>
@@ -103,11 +103,11 @@ export default function WishlistContent({
         {products.map((product) => (
           <div
             key={product.id}
-            className="group relative bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300"
+            className="group relative bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 dark:bg-slate-900 dark:border-slate-800"
           >
             <Link
               href={`/${locale}/products/${product.slug}`}
-              className="block relative aspect-square overflow-hidden bg-slate-100"
+              className="block relative aspect-square overflow-hidden bg-slate-100 dark:bg-slate-800"
             >
               {product.image ? (
                 <img
@@ -148,14 +148,14 @@ export default function WishlistContent({
                 >
                   star
                 </span>
-                <span className="text-sm font-bold text-slate-900">
+                <span className="text-sm font-bold text-slate-900 dark:text-white">
                   {product.rating}
                 </span>
                 <span className="text-xs text-slate-400 font-medium ml-1">
                   ({product.reviewCount} {dict.common.reviews})
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2 leading-tight">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 leading-tight">
                 {product.name}
               </h3>
               <div className="flex items-baseline gap-2 mb-6">
@@ -169,7 +169,7 @@ export default function WishlistContent({
                 )}
               </div>
               {product.stock <= 0 ? (
-                <button className="w-full bg-slate-200 cursor-not-allowed text-slate-500 font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2">
+                <button className="w-full bg-slate-200 cursor-not-allowed text-slate-500 font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 dark:bg-slate-700 dark:text-slate-400">
                   <span className="material-symbols-outlined">
                     notifications
                   </span>
@@ -179,7 +179,7 @@ export default function WishlistContent({
                 <button
                   onClick={() => handleMoveToCart(product.productId)}
                   disabled={isPending}
-                  className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                  className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-60 dark:bg-white dark:text-slate-900"
                 >
                   <span className="material-symbols-outlined">
                     shopping_cart

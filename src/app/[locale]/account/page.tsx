@@ -50,15 +50,15 @@ export default async function AccountPage({
     <>
       {/* Page Title */}
       <div>
-        <h2 className="text-3xl font-black tracking-tight text-slate-900">
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
           {t.title}
         </h2>
-        <p className="text-slate-500 mt-1">{t.subtitle}</p>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">{t.subtitle}</p>
       </div>
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm group hover:border-primary transition-all">
+            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm group hover:border-primary transition-all dark:bg-slate-900 dark:border-slate-800">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-2 bg-primary/10 rounded-lg text-primary">
                   <span className="material-symbols-outlined">shopping_bag</span>
@@ -67,11 +67,11 @@ export default async function AccountPage({
                   {t.lifetime}
                 </span>
               </div>
-              <p className="text-slate-500 text-sm font-medium">{t.totalOrders}</p>
-              <p className="text-3xl font-bold text-slate-900 mt-1">{totalOrders}</p>
+              <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{t.totalOrders}</p>
+              <p className="text-3xl font-bold text-slate-900 dark:text-white mt-1">{totalOrders}</p>
             </div>
 
-            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm group hover:border-primary transition-all">
+            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm group hover:border-primary transition-all dark:bg-slate-900 dark:border-slate-800">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-2 bg-orange-100 rounded-lg text-orange-600">
                   <span className="material-symbols-outlined">local_shipping</span>
@@ -80,11 +80,11 @@ export default async function AccountPage({
                   {t.inTransit}
                 </span>
               </div>
-              <p className="text-slate-500 text-sm font-medium">{t.activeOrders}</p>
-              <p className="text-3xl font-bold text-slate-900 mt-1">{activeOrders}</p>
+              <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{t.activeOrders}</p>
+              <p className="text-3xl font-bold text-slate-900 dark:text-white mt-1">{activeOrders}</p>
             </div>
 
-            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm group hover:border-primary transition-all">
+            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm group hover:border-primary transition-all dark:bg-slate-900 dark:border-slate-800">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-2 bg-green-100 rounded-lg text-green-600">
                   <span className="material-symbols-outlined">redeem</span>
@@ -93,8 +93,8 @@ export default async function AccountPage({
                   {t.balance}
                 </span>
               </div>
-              <p className="text-slate-500 text-sm font-medium">{t.rewardPoints}</p>
-              <p className="text-3xl font-bold text-slate-900 mt-1">
+              <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{t.rewardPoints}</p>
+              <p className="text-3xl font-bold text-slate-900 dark:text-white mt-1">
                 {user.rewardPoints.toLocaleString()}
               </p>
             </div>
@@ -121,28 +121,28 @@ export default async function AccountPage({
           />
 
           {/* Membership Progress */}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm dark:bg-slate-900 dark:border-slate-800">
             <div className="p-8">
               <div className="space-y-4">
                 <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                   {t.membershipStatus}
                 </label>
-                <div className="bg-slate-50 p-6 rounded-xl border border-dashed border-slate-200">
+                <div className="bg-slate-50 p-6 rounded-xl border border-dashed border-slate-200 dark:bg-slate-800 dark:border-slate-700">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-bold text-slate-700 capitalize">
+                    <span className="text-sm font-bold text-slate-700 dark:text-slate-300 capitalize">
                       {user.membershipTier} {t.tierProgress}
                     </span>
                     <span className="text-sm font-bold text-primary">
                       {platinumProgress}% {t.toPlatinum}
                     </span>
                   </div>
-                  <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                     <div
                       className="bg-primary h-full rounded-full shadow-[0_0_10px_rgba(43,140,238,0.5)]"
                       style={{ width: `${platinumProgress}%` }}
                     />
                   </div>
-                  <p className="text-xs text-slate-500 mt-4 leading-relaxed">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-4 leading-relaxed">
                     {t.platinumMessage}
                   </p>
                 </div>
@@ -151,9 +151,9 @@ export default async function AccountPage({
           </div>
 
           {/* Saved Addresses */}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-            <div className="px-8 py-6 border-b border-slate-100 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm dark:bg-slate-900 dark:border-slate-800">
+            <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">location_on</span>
                 {t.sidebarSavedAddresses}
               </h3>
@@ -167,11 +167,11 @@ export default async function AccountPage({
                       className={`p-5 rounded-xl border ${
                         address.isDefault
                           ? "border-primary bg-primary/5"
-                          : "border-slate-200"
+                          : "border-slate-200 dark:border-slate-700"
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-3">
-                        <span className="text-sm font-bold text-slate-900">
+                        <span className="text-sm font-bold text-slate-900 dark:text-white">
                           {address.label}
                         </span>
                         {address.isDefault && (
@@ -186,8 +186,8 @@ export default async function AccountPage({
                           />
                         </div>
                       </div>
-                      <div className="text-slate-600 text-sm space-y-1">
-                        <p className="font-medium text-slate-800">
+                      <div className="text-slate-600 dark:text-slate-400 text-sm space-y-1">
+                        <p className="font-medium text-slate-800 dark:text-slate-200">
                           {address.firstName} {address.lastName}
                         </p>
                         <p>{address.street}</p>

@@ -32,21 +32,21 @@ export default function LoginForm({ locale, dict }: Props) {
   return (
     <div className="mx-auto w-full max-w-md">
       <div className="mb-10 text-center lg:text-left">
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
           {t.welcomeTitle}
         </h1>
-        <p className="mt-2 text-slate-500">{t.welcomeSubtitle}</p>
+        <p className="mt-2 text-slate-500 dark:text-slate-400">{t.welcomeSubtitle}</p>
       </div>
 
       {/* Toggle */}
-      <div className="mb-8 flex h-12 w-full items-center justify-center rounded-xl bg-slate-100 p-1">
+      <div className="mb-8 flex h-12 w-full items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 p-1">
         <button
           type="button"
           onClick={() => setActiveTab("login")}
           className={
             activeTab === "login"
-              ? "flex h-full grow items-center justify-center rounded-lg bg-white px-2 text-sm font-semibold text-primary shadow-sm"
-              : "flex h-full grow items-center justify-center rounded-lg px-2 text-sm font-semibold text-slate-500"
+              ? "flex h-full grow items-center justify-center rounded-lg bg-white dark:bg-slate-700 px-2 text-sm font-semibold text-primary shadow-sm"
+              : "flex h-full grow items-center justify-center rounded-lg px-2 text-sm font-semibold text-slate-500 dark:text-slate-400"
           }
         >
           {t.loginTab}
@@ -56,8 +56,8 @@ export default function LoginForm({ locale, dict }: Props) {
           onClick={() => setActiveTab("signup")}
           className={
             activeTab === "signup"
-              ? "flex h-full grow items-center justify-center rounded-lg bg-white px-2 text-sm font-semibold text-primary shadow-sm"
-              : "flex h-full grow items-center justify-center rounded-lg px-2 text-sm font-semibold text-slate-500"
+              ? "flex h-full grow items-center justify-center rounded-lg bg-white dark:bg-slate-700 px-2 text-sm font-semibold text-primary shadow-sm"
+              : "flex h-full grow items-center justify-center rounded-lg px-2 text-sm font-semibold text-slate-500 dark:text-slate-400"
           }
         >
           {t.signUpTab}
@@ -66,7 +66,7 @@ export default function LoginForm({ locale, dict }: Props) {
 
       {/* Error message */}
       {(activeTab === "login" ? loginState?.error : registerState?.error) && (
-        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-600 font-medium">
+        <div className="mb-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 text-sm text-red-600 font-medium">
           <span className="material-symbols-outlined text-[16px] align-middle mr-1">
             error
           </span>
@@ -78,7 +78,7 @@ export default function LoginForm({ locale, dict }: Props) {
         /* Login Form */
         <form action={loginAction} className="space-y-5">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-slate-700">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
               {t.emailLabel}
             </label>
             <div className="relative">
@@ -90,14 +90,14 @@ export default function LoginForm({ locale, dict }: Props) {
                 name="email"
                 required
                 placeholder={t.emailPlaceholder}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary outline-none transition-all"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-3.5 pl-12 pr-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary outline-none transition-all"
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-semibold text-slate-700">
+              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                 {t.passwordLabel}
               </label>
               <a
@@ -116,7 +116,7 @@ export default function LoginForm({ locale, dict }: Props) {
                 name="password"
                 required
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-12 text-slate-900 placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary outline-none transition-all"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-3.5 pl-12 pr-12 text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary outline-none transition-all"
               />
             </div>
           </div>
@@ -125,9 +125,9 @@ export default function LoginForm({ locale, dict }: Props) {
             <input
               type="checkbox"
               id="remember"
-              className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
+              className="h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary"
             />
-            <label htmlFor="remember" className="text-sm text-slate-500">
+            <label htmlFor="remember" className="text-sm text-slate-500 dark:text-slate-400">
               {t.keepLoggedIn}
             </label>
           </div>
@@ -153,7 +153,7 @@ export default function LoginForm({ locale, dict }: Props) {
         /* Register Form */
         <form action={registerAction} className="space-y-5">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-slate-700">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
               {t.fullNameLabel}
             </label>
             <div className="relative">
@@ -165,13 +165,13 @@ export default function LoginForm({ locale, dict }: Props) {
                 name="name"
                 required
                 placeholder={t.fullNamePlaceholder}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary outline-none transition-all"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-3.5 pl-12 pr-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary outline-none transition-all"
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-slate-700">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
               {t.emailLabel}
             </label>
             <div className="relative">
@@ -183,13 +183,13 @@ export default function LoginForm({ locale, dict }: Props) {
                 name="email"
                 required
                 placeholder={t.emailPlaceholder}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary outline-none transition-all"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-3.5 pl-12 pr-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary outline-none transition-all"
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-slate-700">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
               {t.passwordLabel}
             </label>
             <div className="relative">
@@ -202,7 +202,7 @@ export default function LoginForm({ locale, dict }: Props) {
                 required
                 minLength={6}
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-12 text-slate-900 placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary outline-none transition-all"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-3.5 pl-12 pr-12 text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary outline-none transition-all"
               />
             </div>
           </div>
@@ -229,10 +229,10 @@ export default function LoginForm({ locale, dict }: Props) {
       {/* Divider */}
       <div className="relative my-10">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-slate-200" />
+          <div className="w-full border-t border-slate-200 dark:border-slate-700" />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="bg-white px-4 text-[10px] font-medium uppercase tracking-widest text-slate-400">
+          <span className="bg-white dark:bg-slate-900 px-4 text-[10px] font-medium uppercase tracking-widest text-slate-400">
             {t.orContinueWith}
           </span>
         </div>
@@ -240,20 +240,20 @@ export default function LoginForm({ locale, dict }: Props) {
 
       {/* Social */}
       <div className="grid grid-cols-2 gap-4">
-        <button className="flex items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 hover:bg-slate-50 transition-colors">
-          <span className="text-sm font-semibold text-slate-700">
+        <button className="flex items-center justify-center gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+          <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
             {t.google}
           </span>
         </button>
-        <button className="flex items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 hover:bg-slate-50 transition-colors">
-          <span className="text-sm font-semibold text-slate-700">
+        <button className="flex items-center justify-center gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+          <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
             {t.apple}
           </span>
         </button>
       </div>
 
       <div className="mt-12 text-center">
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           {t.enterpriseText}
           <a
             href="#"

@@ -24,24 +24,24 @@ export default function Footer({ locale, dict }: Props) {
   ];
 
   return (
-    <footer className="border-t border-slate-200 bg-white py-12">
+    <footer className="border-t border-slate-200 bg-white py-12 dark:border-slate-800 dark:bg-slate-900">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
           {/* Brand */}
           <div>
             <div className="mb-6 flex items-center gap-2 text-primary">
               <span className="material-symbols-outlined text-3xl">lightbulb</span>
-              <h2 className="text-xl font-bold text-slate-900">{SITE_NAME}</h2>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">{SITE_NAME}</h2>
             </div>
-            <p className="text-sm leading-relaxed text-slate-500">
+            <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
               {dict.footer.brandDescription}
             </p>
           </div>
 
           {/* Shop Links */}
           <div>
-            <h4 className="mb-6 font-bold text-slate-900">{dict.footer.shop}</h4>
-            <ul className="space-y-4 text-sm text-slate-500">
+            <h4 className="mb-6 font-bold text-slate-900 dark:text-white">{dict.footer.shop}</h4>
+            <ul className="space-y-4 text-sm text-slate-500 dark:text-slate-400">
               {shopLinks.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="hover:text-primary">
@@ -54,8 +54,8 @@ export default function Footer({ locale, dict }: Props) {
 
           {/* Support Links */}
           <div>
-            <h4 className="mb-6 font-bold text-slate-900">{dict.footer.support}</h4>
-            <ul className="space-y-4 text-sm text-slate-500">
+            <h4 className="mb-6 font-bold text-slate-900 dark:text-white">{dict.footer.support}</h4>
+            <ul className="space-y-4 text-sm text-slate-500 dark:text-slate-400">
               {supportLinks.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="hover:text-primary">
@@ -68,8 +68,8 @@ export default function Footer({ locale, dict }: Props) {
 
           {/* Newsletter */}
           <div>
-            <h4 className="mb-6 font-bold text-slate-900">{dict.footer.newsletter}</h4>
-            <p className="mb-4 text-sm text-slate-500">
+            <h4 className="mb-6 font-bold text-slate-900 dark:text-white">{dict.footer.newsletter}</h4>
+            <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
               {dict.footer.newsletterText}
             </p>
             <NewsletterForm
@@ -79,7 +79,7 @@ export default function Footer({ locale, dict }: Props) {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-100 pt-8 md:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-100 pt-8 md:flex-row dark:border-slate-800">
           <p className="text-xs text-slate-400">
             &copy; {new Date().getFullYear()} {SITE_NAME}. {dict.common.allRightsReserved}
           </p>

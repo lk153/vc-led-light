@@ -61,13 +61,13 @@ export default function Header({ locale, dict, cartCount = 0, userName }: Props)
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/80">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         {/* Logo */}
         <div className="flex items-center gap-8">
           <Link href={prefix} className="flex items-center gap-2 text-primary">
             <span className="material-symbols-outlined text-3xl">lightbulb</span>
-            <h1 className="text-xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
               {SITE_NAME}
             </h1>
           </Link>
@@ -84,7 +84,7 @@ export default function Header({ locale, dict, cartCount = 0, userName }: Props)
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={dict.common.search}
-                  className="w-full rounded-lg border-none bg-slate-100 py-2 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-primary focus:outline-none"
+                  className="w-full rounded-lg border-none bg-slate-100 py-2 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-primary focus:outline-none dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
                 />
               </div>
             </form>
@@ -97,7 +97,7 @@ export default function Header({ locale, dict, cartCount = 0, userName }: Props)
             <Link
               key={i}
               href={link.href}
-              className="text-sm font-medium text-slate-600 hover:text-primary transition-colors"
+              className="text-sm font-medium text-slate-600 hover:text-primary transition-colors dark:text-slate-400"
             >
               {link.label}
             </Link>
@@ -109,7 +109,7 @@ export default function Header({ locale, dict, cartCount = 0, userName }: Props)
           {/* Language Switcher */}
           <Link
             href={switchLocalePath(locale === "en" ? "vi" : "en")}
-            className="flex h-10 items-center gap-1.5 rounded-lg bg-slate-100 px-3 text-sm font-medium text-slate-700 hover:bg-primary/10 hover:text-primary transition-all"
+            className="flex h-10 items-center gap-1.5 rounded-lg bg-slate-100 px-3 text-sm font-medium text-slate-700 hover:bg-primary/10 hover:text-primary transition-all dark:bg-slate-800 dark:text-slate-300"
             title={locale === "en" ? "Chuyển sang Tiếng Việt" : "Switch to English"}
           >
             <span className="material-symbols-outlined text-lg">translate</span>
@@ -120,7 +120,7 @@ export default function Header({ locale, dict, cartCount = 0, userName }: Props)
           <button
             onClick={toggleDarkMode}
             title={isDark ? "Switch to light mode" : "Switch to dark mode"}
-            className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 hover:bg-primary/10 hover:text-primary transition-all"
+            className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 hover:bg-primary/10 hover:text-primary transition-all dark:bg-slate-800 dark:text-slate-300"
           >
             <span className="material-symbols-outlined text-xl">
               {isDark ? "light_mode" : "dark_mode"}
@@ -129,7 +129,7 @@ export default function Header({ locale, dict, cartCount = 0, userName }: Props)
 
           <Link
             href={`${prefix}/cart`}
-            className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 hover:bg-primary/10 hover:text-primary transition-all"
+            className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 hover:bg-primary/10 hover:text-primary transition-all dark:bg-slate-800 dark:text-slate-300"
           >
             <span className="material-symbols-outlined">shopping_cart</span>
             {cartCount > 0 && (
@@ -152,7 +152,7 @@ export default function Header({ locale, dict, cartCount = 0, userName }: Props)
           ) : (
             <Link
               href={`${prefix}/login`}
-              className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 hover:bg-primary/10 hover:text-primary transition-all"
+              className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 hover:bg-primary/10 hover:text-primary transition-all dark:bg-slate-800 dark:text-slate-300"
             >
               <span className="material-symbols-outlined">person</span>
             </Link>
@@ -172,13 +172,13 @@ export default function Header({ locale, dict, cartCount = 0, userName }: Props)
 
       {/* Mobile Nav */}
       {mobileOpen && (
-        <nav className="border-t border-slate-200 px-4 py-4 lg:hidden">
+        <nav className="border-t border-slate-200 px-4 py-4 lg:hidden dark:border-slate-800">
           {navLinks.map((link, i) => (
             <Link
               key={i}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className="block py-2 text-sm font-medium text-slate-600 hover:text-primary"
+              className="block py-2 text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-400"
             >
               {link.label}
             </Link>
@@ -186,7 +186,7 @@ export default function Header({ locale, dict, cartCount = 0, userName }: Props)
           <Link
             href={switchLocalePath(locale === "en" ? "vi" : "en")}
             onClick={() => setMobileOpen(false)}
-            className="block py-2 text-sm font-medium text-slate-600 hover:text-primary"
+            className="block py-2 text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-400"
           >
             {locale === "en" ? "🇻🇳 Tiếng Việt" : "🇬🇧 English"}
           </Link>

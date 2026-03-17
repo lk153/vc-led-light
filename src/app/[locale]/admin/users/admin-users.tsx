@@ -1,20 +1,52 @@
 "use client";
 
 import { useState, useTransition, useEffect, useCallback } from "react";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatCurrency } from "@/lib/utils";
 import { toggleUserActive, resetUserPassword } from "@/actions/admin";
 import type { Dictionary } from "@/i18n/get-dictionary";
+
+type SerializedAddress = {
+  label: string;
+  firstName: string;
+  lastName: string;
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  phone: string | null;
+  isDefault: boolean;
+};
+
+type SerializedOrder = {
+  orderNumber: string;
+  status: string;
+  total: number;
+  createdAt: string;
+};
 
 type SerializedUser = {
   id: string;
   name: string;
   email: string;
+  phone: string | null;
   role: string;
   accountType: string;
   membershipTier: string;
   rewardPoints: number;
   createdAt: string;
   orderCount: number;
+  wishlistCount: number;
+  reviewCount: number;
+  addresses: SerializedAddress[];
+  recentOrders: SerializedOrder[];
+};
+
+const statusColors: Record<string, string> = {
+  processing: "bg-orange-100 text-orange-700",
+  shipped: "bg-blue-100 text-blue-700",
+  delivered: "bg-green-100 text-green-700",
+  cancelled: "bg-red-100 text-red-700",
 };
 
 export default function AdminUsers({
@@ -26,6 +58,7 @@ export default function AdminUsers({
 }) {
   const t = dict.admin;
   const [isPending, startTransition] = useTransition();
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [confirmModal, setConfirmModal] = useState<{
     userId: string;
     userName: string;
@@ -56,93 +89,31 @@ export default function AdminUsers({
       {users.length === 0 ? (
         <div className="text-center py-16 text-slate-400">{t.noUsers}</div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-200">
-                  <th className="text-left px-6 py-4 font-semibold text-slate-600">{t.name}</th>
-                  <th className="text-left px-6 py-4 font-semibold text-slate-600">{t.email}</th>
-                  <th className="text-left px-6 py-4 font-semibold text-slate-600">{t.role}</th>
-                  <th className="text-left px-6 py-4 font-semibold text-slate-600">{t.membershipTier}</th>
-                  <th className="text-center px-6 py-4 font-semibold text-slate-600">{t.totalOrders}</th>
-                  <th className="text-left px-6 py-4 font-semibold text-slate-600">{t.joined}</th>
-                  <th className="text-center px-6 py-4 font-semibold text-slate-600">{t.status}</th>
-                  <th className="text-center px-6 py-4 font-semibold text-slate-600">{t.actions}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => {
-                  const isDisabled = user.accountType === "disabled";
-                  const isAdmin = user.role === "admin";
+        <div className="space-y-4">
+          {users.map((user, idx) => {
+            const isDisabled = user.accountType === "disabled";
+            const isAdmin = user.role === "admin";
+            const expanded = expandedId === user.id;
 
-                  return (
-                    <tr key={user.id} className="border-b border-slate-100 hover:bg-slate-50/50">
-                      <td className="px-6 py-4 font-medium text-slate-900">{user.name}</td>
-                      <td className="px-6 py-4 text-slate-600">{user.email}</td>
-                      <td className="px-6 py-4">
-                        <span
-                          className={`text-xs font-bold px-3 py-1 rounded-full ${
-                            isAdmin
-                              ? "bg-purple-100 text-purple-700"
-                              : "bg-slate-100 text-slate-600"
-                          }`}
-                        >
-                          {isAdmin ? t.admin : t.user}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="capitalize text-slate-600">{user.membershipTier}</span>
-                      </td>
-                      <td className="px-6 py-4 text-center text-slate-600">{user.orderCount}</td>
-                      <td className="px-6 py-4 text-slate-600">{formatDate(user.createdAt)}</td>
-                      <td className="px-6 py-4 text-center">
-                        <span
-                          className={`text-xs font-bold px-3 py-1 rounded-full ${
-                            isDisabled
-                              ? "bg-red-100 text-red-700"
-                              : "bg-green-100 text-green-700"
-                          }`}
-                        >
-                          {isDisabled ? t.inactive : t.active}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <div className="flex items-center justify-center gap-2">
-                          {!isAdmin && (
-                            <>
-                              <button
-                                onClick={() => handleToggle(user.id)}
-                                disabled={isPending}
-                                className={`text-xs font-bold px-4 py-1.5 rounded-lg transition-colors ${
-                                  isDisabled
-                                    ? "bg-green-500 text-white hover:bg-green-600"
-                                    : "bg-red-500 text-white hover:bg-red-600"
-                                } disabled:opacity-50`}
-                              >
-                                {isDisabled ? t.activate : t.deactivate}
-                              </button>
-                              <button
-                                onClick={() => setConfirmModal({ userId: user.id, userName: user.name })}
-                                disabled={isPending}
-                                className="text-xs font-bold px-4 py-1.5 rounded-lg bg-orange-500 text-white hover:bg-orange-600 transition-colors disabled:opacity-50"
-                              >
-                                {t.resetPassword}
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+            return (
+              <UserCard
+                key={user.id}
+                user={user}
+                t={t}
+                isDisabled={isDisabled}
+                isAdmin={isAdmin}
+                expanded={expanded}
+                isPending={isPending}
+                even={idx % 2 === 0}
+                onToggle={() => setExpandedId(expanded ? null : user.id)}
+                onToggleActive={() => handleToggle(user.id)}
+                onResetPassword={() => setConfirmModal({ userId: user.id, userName: user.name })}
+              />
+            );
+          })}
         </div>
       )}
 
-      {/* Reset Password Confirmation Modal */}
       {confirmModal && (
         <ConfirmModal
           t={t}
@@ -153,6 +124,196 @@ export default function AdminUsers({
         />
       )}
     </>
+  );
+}
+
+function UserCard({
+  user,
+  t,
+  isDisabled,
+  isAdmin,
+  expanded,
+  isPending,
+  even,
+  onToggle,
+  onToggleActive,
+  onResetPassword,
+}: {
+  user: SerializedUser;
+  t: Dictionary["admin"];
+  isDisabled: boolean;
+  isAdmin: boolean;
+  expanded: boolean;
+  isPending: boolean;
+  even: boolean;
+  onToggle: () => void;
+  onToggleActive: () => void;
+  onResetPassword: () => void;
+}) {
+  return (
+    <div className={`rounded-xl border border-slate-200 shadow-sm overflow-hidden ${even ? "bg-white" : "bg-slate-100"}`}>
+      {/* User summary row */}
+      <div className="flex items-center gap-4 p-4">
+        {/* Avatar */}
+        <div className="w-10 h-10 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-xl text-primary">person</span>
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-slate-900 truncate">{user.name}</h3>
+            <span
+              className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
+                isAdmin ? "bg-purple-100 text-purple-700" : "bg-slate-200 text-slate-600"
+              }`}
+            >
+              {isAdmin ? t.admin : t.user}
+            </span>
+            <span
+              className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
+                isDisabled ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"
+              }`}
+            >
+              {isDisabled ? t.inactive : t.active}
+            </span>
+          </div>
+          <p className="text-sm text-slate-500 mt-0.5">
+            {user.email} · <span className="capitalize">{user.membershipTier}</span> · {t.totalOrders}: {user.orderCount} · {formatDate(user.createdAt)}
+          </p>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={onToggle}
+            className="inline-flex items-center gap-1 text-primary hover:text-primary/80 font-medium text-xs"
+          >
+            <span className="material-symbols-outlined text-base">
+              {expanded ? "expand_less" : "expand_more"}
+            </span>
+            {expanded ? t.close : t.userDetails}
+          </button>
+          {!isAdmin && (
+            <>
+              <button
+                onClick={onToggleActive}
+                disabled={isPending}
+                className={`text-xs font-bold px-4 py-1.5 rounded-lg transition-colors ${
+                  isDisabled
+                    ? "bg-green-500 text-white hover:bg-green-600"
+                    : "bg-red-500 text-white hover:bg-red-600"
+                } disabled:opacity-50`}
+              >
+                {isDisabled ? t.activate : t.deactivate}
+              </button>
+              <button
+                onClick={onResetPassword}
+                disabled={isPending}
+                className="text-xs font-bold px-4 py-1.5 rounded-lg bg-orange-500 text-white hover:bg-orange-600 transition-colors disabled:opacity-50"
+              >
+                {t.resetPassword}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Expanded details */}
+      {expanded && (
+        <div className="border-t border-slate-200 bg-slate-100 px-6 py-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* User Info */}
+            <div>
+              <h4 className="font-bold text-slate-700 mb-3">{t.userInfo}</h4>
+              <div className="space-y-3 text-sm">
+                <div className="bg-white p-3 rounded-lg border border-slate-200">
+                  <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">{t.email}</p>
+                  <p className="text-slate-900">{user.email}</p>
+                </div>
+                {user.phone && (
+                  <div className="bg-white p-3 rounded-lg border border-slate-200">
+                    <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">{t.phone}</p>
+                    <p className="text-slate-900">{user.phone}</p>
+                  </div>
+                )}
+                <div className="bg-white p-3 rounded-lg border border-slate-200">
+                  <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">{t.membershipTier}</p>
+                  <p className="text-slate-900 capitalize">{user.membershipTier}</p>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="bg-white p-3 rounded-lg border border-slate-200 text-center">
+                    <p className="text-lg font-bold text-slate-900">{user.rewardPoints}</p>
+                    <p className="text-slate-400 text-[10px] font-semibold uppercase tracking-wider">{t.rewardPoints}</p>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-slate-200 text-center">
+                    <p className="text-lg font-bold text-slate-900">{user.wishlistCount}</p>
+                    <p className="text-slate-400 text-[10px] font-semibold uppercase tracking-wider">{t.wishlist}</p>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-slate-200 text-center">
+                    <p className="text-lg font-bold text-slate-900">{user.reviewCount}</p>
+                    <p className="text-slate-400 text-[10px] font-semibold uppercase tracking-wider">{t.reviews}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Recent Orders */}
+            <div>
+              <h4 className="font-bold text-slate-700 mb-3">{t.recentOrders}</h4>
+              {user.recentOrders.length > 0 ? (
+                <div className="space-y-2">
+                  {user.recentOrders.map((order) => (
+                    <div key={order.orderNumber} className="bg-white p-3 rounded-lg border border-slate-200 flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-slate-900">{order.orderNumber}</p>
+                        <p className="text-xs text-slate-400">{formatDate(order.createdAt)}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-bold text-slate-900">{formatCurrency(order.total)}</p>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${statusColors[order.status] || statusColors.processing}`}>
+                          {t[order.status as keyof typeof t] as string}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-white p-4 rounded-lg border border-slate-200 text-center text-slate-400 text-sm">
+                  {t.noOrders}
+                </div>
+              )}
+            </div>
+
+            {/* Addresses */}
+            <div>
+              <h4 className="font-bold text-slate-700 mb-3">{t.addresses}</h4>
+              {user.addresses.length > 0 ? (
+                <div className="space-y-2">
+                  {user.addresses.map((addr, addrIdx) => (
+                    <div key={addrIdx} className="bg-white p-3 rounded-lg border border-slate-200 text-sm text-slate-600">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-semibold text-slate-900">{addr.label}</span>
+                        {addr.isDefault && (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary uppercase">
+                            Default
+                          </span>
+                        )}
+                      </div>
+                      <p>{addr.firstName} {addr.lastName}</p>
+                      <p>{addr.street}</p>
+                      <p>{addr.city}, {addr.state} {addr.zipCode}</p>
+                      <p>{addr.country}</p>
+                      {addr.phone && <p className="text-slate-400 mt-1">{addr.phone}</p>}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-white p-4 rounded-lg border border-slate-200 text-center text-slate-400 text-sm">
+                  {t.noAddresses}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -171,9 +332,9 @@ function ConfirmModal({
 }) {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "Escape") onCancel();
+      if (e.key === "Escape" && !isPending) onCancel();
     },
-    [onCancel]
+    [onCancel, isPending]
   );
 
   useEffect(() => {
@@ -184,13 +345,12 @@ function ConfirmModal({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
-      onClick={onCancel}
+      onClick={isPending ? undefined : onCancel}
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-center gap-4 p-6 pb-0">
           <div className="flex items-center justify-center w-12 h-12 rounded-full bg-orange-100 shrink-0">
             <span className="material-symbols-outlined text-2xl text-orange-600">lock_reset</span>
@@ -200,13 +360,9 @@ function ConfirmModal({
             <p className="text-sm text-slate-500 mt-0.5">{userName}</p>
           </div>
         </div>
-
-        {/* Body */}
         <div className="px-6 py-4">
           <p className="text-sm text-slate-600">{t.resetPasswordConfirm}</p>
         </div>
-
-        {/* Actions */}
         <div className="flex justify-end gap-3 px-6 py-4 bg-slate-50 border-t border-slate-100">
           <button
             onClick={onCancel}

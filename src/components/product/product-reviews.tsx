@@ -124,12 +124,12 @@ export default function ProductReviews({
     <section className="mt-20">
       <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
         <div>
-          <h3 className="mb-2 text-2xl font-bold">{dict.customerReviews}</h3>
+          <h3 className="mb-2 text-2xl font-bold dark:text-white">{dict.customerReviews}</h3>
           <div className="flex items-center gap-4">
-            <span className="text-5xl font-black">{rating.toFixed(1)}</span>
+            <span className="text-5xl font-black dark:text-white">{rating.toFixed(1)}</span>
             <div>
               <StarRating rating={rating} size="text-base" />
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 {dict.basedOn.replace("{count}", reviewCount.toLocaleString())}
               </p>
             </div>
@@ -149,8 +149,8 @@ export default function ProductReviews({
 
       {/* Review form */}
       {showForm && (
-        <div className="mb-10 rounded-xl border border-slate-200 bg-slate-50 p-6">
-          <h4 className="mb-4 text-lg font-bold text-slate-900">Write a Review</h4>
+        <div className="mb-10 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 p-6">
+          <h4 className="mb-4 text-lg font-bold text-slate-900 dark:text-white">Write a Review</h4>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
               <label className="mb-1 block text-xs font-bold uppercase tracking-widest text-slate-400">
@@ -165,7 +165,7 @@ export default function ProductReviews({
               <input
                 name="title"
                 placeholder="Summarize your experience"
-                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="w-full rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-white px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
             </div>
             <div>
@@ -176,7 +176,7 @@ export default function ProductReviews({
                 name="body"
                 rows={4}
                 placeholder="Tell others what you think about this product..."
-                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+                className="w-full rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-white px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
               />
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
@@ -195,7 +195,7 @@ export default function ProductReviews({
                   setError("");
                   setStarRating(0);
                 }}
-                className="rounded-lg bg-slate-100 px-6 py-2 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-200"
+                className="rounded-lg bg-slate-100 dark:bg-slate-700 px-6 py-2 text-sm font-bold text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-200"
               >
                 Cancel
               </button>
@@ -205,7 +205,7 @@ export default function ProductReviews({
       )}
 
       {success && (
-        <div className="mb-8 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+        <div className="mb-8 flex items-center gap-2 rounded-lg border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 px-4 py-3 text-sm font-medium text-green-700">
           <span className="material-symbols-outlined text-sm">check_circle</span>
           Your review has been submitted. Thank you!
         </div>
@@ -216,7 +216,7 @@ export default function ProductReviews({
           {reviews.map((review) => (
             <div
               key={review.id}
-              className="space-y-4 rounded-xl border border-slate-200 p-6"
+              className="space-y-4 rounded-xl border border-slate-200 dark:border-slate-800 p-6"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -224,7 +224,7 @@ export default function ProductReviews({
                     {getInitials(review.user.name)}
                   </div>
                   <div>
-                    <h5 className="text-sm font-bold">
+                    <h5 className="text-sm font-bold dark:text-white">
                       {review.user.name ?? anonymous}
                     </h5>
                     {review.verified && (
@@ -235,10 +235,10 @@ export default function ProductReviews({
                 <StarRating rating={review.rating} />
               </div>
               {review.title && (
-                <p className="text-sm font-bold">{review.title}</p>
+                <p className="text-sm font-bold dark:text-white">{review.title}</p>
               )}
               {review.body && (
-                <p className="text-sm leading-relaxed text-slate-600">
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                   {review.body}
                 </p>
               )}
@@ -246,13 +246,13 @@ export default function ProductReviews({
           ))}
         </div>
       ) : (
-        <p className="text-center text-slate-500 py-8">
+        <p className="text-center text-slate-500 dark:text-slate-400 py-8">
           {dict.noReviews}
         </p>
       )}
 
       {reviewCount > reviews.length && (
-        <button className="mt-8 w-full border-t border-slate-200 pt-4 text-sm font-bold uppercase tracking-widest text-slate-500 transition-colors hover:text-primary">
+        <button className="mt-8 w-full border-t border-slate-200 dark:border-slate-800 pt-4 text-sm font-bold uppercase tracking-widest text-slate-500 transition-colors hover:text-primary">
           {dict.viewAllReviews}
         </button>
       )}

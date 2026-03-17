@@ -52,7 +52,7 @@ export default async function LoginPage({
       </div>
 
       {/* Right: Form */}
-      <div className="flex flex-1 flex-col justify-center bg-white px-6 py-12 lg:px-16 xl:px-24">
+      <div className="flex flex-1 flex-col justify-center bg-white dark:bg-slate-900 px-6 py-12 lg:px-16 xl:px-24">
         <LoginForm locale={locale} dict={dict} />
       </div>
     </div>

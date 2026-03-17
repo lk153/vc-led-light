@@ -61,13 +61,13 @@ export default function SupportContent({
   return (
     <div>
       {/* Hero Search Section */}
-      <div className="w-full bg-primary/10 py-16 px-6">
+      <div className="w-full bg-primary/10 dark:bg-primary/5 py-16 px-6">
         <div className="max-w-[960px] mx-auto flex flex-col items-center gap-8 text-center">
           <div className="space-y-4">
-            <h1 className="text-slate-900 text-4xl md:text-5xl font-black tracking-tight">
+            <h1 className="text-slate-900 dark:text-white text-4xl md:text-5xl font-black tracking-tight">
               {t.heroTitle}
             </h1>
-            <p className="text-slate-600 text-base md:text-lg max-w-2xl">
+            <p className="text-slate-600 dark:text-slate-400 text-base md:text-lg max-w-2xl">
               {t.heroDescription}
             </p>
           </div>
@@ -77,7 +77,7 @@ export default function SupportContent({
                 <span className="material-symbols-outlined">search</span>
               </div>
               <input
-                className="block w-full pl-12 pr-32 py-4 md:py-5 border-none bg-white rounded-xl shadow-lg focus:ring-2 focus:ring-primary text-slate-900 placeholder:text-slate-400"
+                className="block w-full pl-12 pr-32 py-4 md:py-5 border-none bg-white dark:bg-slate-800 rounded-xl shadow-lg focus:ring-2 focus:ring-primary text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
                 placeholder={t.searchPlaceholder}
                 type="text"
                 value={searchQuery}
@@ -110,24 +110,24 @@ export default function SupportContent({
       <div className="max-w-[1200px] mx-auto px-6 lg:px-10 py-12">
         {/* Categories Grid */}
         <section className="mb-16">
-          <h2 className="text-slate-900 text-2xl font-bold mb-8">
+          <h2 className="text-slate-900 dark:text-white text-2xl font-bold mb-8">
             {t.browseByCategory}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((category) => (
               <div
                 key={category.title}
-                className="group p-6 bg-white rounded-xl border border-slate-200 hover:border-primary transition-all cursor-pointer shadow-sm hover:shadow-md"
+                className="group p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary transition-all cursor-pointer shadow-sm hover:shadow-md"
               >
                 <div className="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
                   <span className="material-symbols-outlined text-3xl">
                     {category.icon}
                   </span>
                 </div>
-                <h3 className="text-slate-900 font-bold text-lg mb-2">
+                <h3 className="text-slate-900 dark:text-white font-bold text-lg mb-2">
                   {category.title}
                 </h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                   {category.description}
                 </p>
               </div>
@@ -139,13 +139,13 @@ export default function SupportContent({
         <div className="flex flex-col lg:flex-row gap-12">
           {/* FAQs Accordion */}
           <div className="flex-1">
-            <h2 className="text-slate-900 text-2xl font-bold mb-8">
+            <h2 className="text-slate-900 dark:text-white text-2xl font-bold mb-8">
               {normalizedQuery
                 ? `${faqs.length} result${faqs.length !== 1 ? "s" : ""} for "${searchQuery}"`
                 : t.popularFaqs}
             </h2>
             {faqs.length === 0 && (
-              <div className="flex flex-col items-center gap-4 py-12 text-center text-slate-500">
+              <div className="flex flex-col items-center gap-4 py-12 text-center text-slate-500 dark:text-slate-400">
                 <span className="material-symbols-outlined text-5xl text-slate-300">search_off</span>
                 <p>No FAQs match your search. Try different keywords or contact support.</p>
               </div>
@@ -154,13 +154,13 @@ export default function SupportContent({
               {faqs.map((faq, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-lg border border-slate-200 overflow-hidden"
+                  className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 overflow-hidden"
                 >
                   <button
                     onClick={() => toggleFaq(index)}
-                    className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors"
+                    className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                   >
-                    <span className="font-semibold text-slate-900">
+                    <span className="font-semibold text-slate-900 dark:text-white">
                       {faq.question}
                     </span>
                     <span className="material-symbols-outlined text-slate-400 transition-transform duration-200 shrink-0 ml-4">
@@ -168,7 +168,7 @@ export default function SupportContent({
                     </span>
                   </button>
                   {openFaq === index && (
-                    <div className="px-6 pb-4 text-slate-600 text-sm leading-relaxed">
+                    <div className="px-6 pb-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
                       {faq.answer}
                     </div>
                   )}
@@ -179,8 +179,8 @@ export default function SupportContent({
 
           {/* Sidebar: Contact Support */}
           <aside className="w-full lg:w-80">
-            <div className="bg-white rounded-xl border border-slate-200 p-6 sticky top-24">
-              <h3 className="text-slate-900 font-bold text-xl mb-6">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 sticky top-24">
+              <h3 className="text-slate-900 dark:text-white font-bold text-xl mb-6">
                 {t.needMoreHelp}
               </h3>
               <div className="space-y-6">
@@ -189,10 +189,10 @@ export default function SupportContent({
                     <span className="material-symbols-outlined">mail</span>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-slate-900">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">
                       {t.emailUs}
                     </p>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
                       {t.emailAddress}
                     </p>
                     <p className="text-xs text-slate-400 mt-1">
@@ -205,23 +205,23 @@ export default function SupportContent({
                     <span className="material-symbols-outlined">call</span>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-slate-900">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">
                       {t.callSupport}
                     </p>
-                    <p className="text-sm text-slate-500">{t.phoneNumber}</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">{t.phoneNumber}</p>
                     <p className="text-xs text-slate-400 mt-1">
                       {t.callHours}
                     </p>
                   </div>
                 </div>
-                <hr className="border-slate-100" />
-                <div className="bg-slate-50 p-4 rounded-lg">
-                  <p className="text-sm text-slate-600 mb-3 italic">
+                <hr className="border-slate-100 dark:border-slate-800" />
+                <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-3 italic">
                     {t.testimonial}
                   </p>
                   <div className="flex items-center gap-2">
-                    <div className="size-6 rounded-full bg-slate-300" />
-                    <span className="text-xs font-medium text-slate-900">
+                    <div className="size-6 rounded-full bg-slate-300 dark:bg-slate-600" />
+                    <span className="text-xs font-medium text-slate-900 dark:text-white">
                       {t.testimonialAuthor}
                     </span>
                   </div>

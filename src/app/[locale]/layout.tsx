@@ -37,7 +37,7 @@ export default async function LocaleLayout({
       {isAdmin && (
         <a
           href={`/${locale}/admin`}
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3 bg-background-dark text-white text-sm font-bold rounded-full shadow-lg hover:bg-background-dark/90 transition-colors"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3 bg-background-dark text-white dark:bg-white dark:text-background-dark text-sm font-bold rounded-full shadow-lg hover:bg-background-dark/90 dark:hover:bg-slate-200 transition-colors"
         >
           <span className="material-symbols-outlined text-lg">admin_panel_settings</span>
           Admin

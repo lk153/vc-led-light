@@ -501,7 +501,16 @@
     "quantity": "Qty",
     "resetPassword": "Reset Password",
     "resetPasswordConfirm": "Reset password to default (password123)?",
-    "passwordResetSuccess": "Password reset successfully"
+    "passwordResetSuccess": "Password reset successfully",
+    "userDetails": "Details",
+    "userInfo": "User Info",
+    "phone": "Phone",
+    "rewardPoints": "Points",
+    "wishlist": "Wishlist",
+    "reviews": "Reviews",
+    "recentOrders": "Recent Orders",
+    "addresses": "Addresses",
+    "noAddresses": "No saved addresses."
   },
   "productReviews": {
     "customerReviews": "Customer Reviews",

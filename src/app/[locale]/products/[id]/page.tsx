@@ -156,7 +156,7 @@ export default async function ProductDetailPage({ params }: Props) {
   return (
     <div className="mx-auto max-w-7xl px-6 py-8 lg:px-20">
       {/* Breadcrumb */}
-      <nav className="mb-8 flex items-center gap-2 text-sm text-slate-500">
+      <nav className="mb-8 flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
         <Link href={`/${locale}`} className="hover:text-primary transition-colors">
           {dict.common.home}
         </Link>
@@ -168,7 +168,7 @@ export default async function ProductDetailPage({ params }: Props) {
           {(dict.productSearch.categoryNames as Record<string, string>)[product.category.slug] ?? product.category.name}
         </Link>
         <span className="material-symbols-outlined text-xs">chevron_right</span>
-        <span className="font-medium text-slate-900">{t?.name ?? product.name}</span>
+        <span className="font-medium text-slate-900 dark:text-white">{t?.name ?? product.name}</span>
       </nav>
 
       {/* Product Hero: Gallery + Info */}
@@ -198,7 +198,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1">
                 <StarRating rating={rating} />
-                <span className="ml-1 text-sm font-medium text-slate-600">
+                <span className="ml-1 text-sm font-medium text-slate-600 dark:text-slate-400">
                   {rating.toFixed(1)} ({product.reviewCount.toLocaleString()}{" "}
                   {dict.common.reviews})
                 </span>
@@ -207,9 +207,9 @@ export default async function ProductDetailPage({ params }: Props) {
           </div>
 
           {/* Price */}
-          <div className="border-y border-slate-200 py-6">
+          <div className="border-y border-slate-200 dark:border-slate-700 py-6">
             <div className="mb-1 flex items-baseline gap-4">
-              <span className="text-4xl font-bold text-slate-900">
+              <span className="text-4xl font-bold text-slate-900 dark:text-white">
                 {formatCurrency(price)}
               </span>
               {compareAtPrice && (
@@ -223,14 +223,14 @@ export default async function ProductDetailPage({ params }: Props) {
                 </span>
               )}
             </div>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               {dict.productDetail.freeShippingNote}
             </p>
           </div>
 
           {/* Short Description */}
           {(t?.shortDescription ?? product.shortDescription) && (
-            <p className="text-sm leading-relaxed text-slate-600">
+            <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
               {t?.shortDescription ?? product.shortDescription}
             </p>
           )}
@@ -252,20 +252,20 @@ export default async function ProductDetailPage({ params }: Props) {
 
           {/* Trust Badges */}
           <div className="grid grid-cols-2 gap-4 py-4">
-            <div className="flex items-center gap-3 rounded-lg bg-slate-50 p-3">
+            <div className="flex items-center gap-3 rounded-lg bg-slate-50 dark:bg-slate-800 p-3">
               <span className="material-symbols-outlined text-primary">
                 verified
               </span>
               <div className="text-xs">
-                <p className="font-bold">{dict.productDetail.warranty}</p>
-                <p className="text-slate-500">{dict.productDetail.warrantyCoverage}</p>
+                <p className="font-bold dark:text-white">{dict.productDetail.warranty}</p>
+                <p className="text-slate-500 dark:text-slate-400">{dict.productDetail.warrantyCoverage}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 rounded-lg bg-slate-50 p-3">
+            <div className="flex items-center gap-3 rounded-lg bg-slate-50 dark:bg-slate-800 p-3">
               <span className="material-symbols-outlined text-primary">eco</span>
               <div className="text-xs">
-                <p className="font-bold">{dict.productDetail.energyStar}</p>
-                <p className="text-slate-500">{dict.productDetail.energyStarDesc}</p>
+                <p className="font-bold dark:text-white">{dict.productDetail.energyStar}</p>
+                <p className="text-slate-500 dark:text-slate-400">{dict.productDetail.energyStarDesc}</p>
               </div>
             </div>
           </div>
@@ -275,7 +275,7 @@ export default async function ProductDetailPage({ params }: Props) {
       {/* Technical Specifications */}
       {specs.length > 0 && (
         <section className="mt-20">
-          <h3 className="mb-8 flex items-center gap-2 text-2xl font-bold">
+          <h3 className="mb-8 flex items-center gap-2 text-2xl font-bold dark:text-white">
             <span className="material-symbols-outlined">
               settings_input_component
             </span>
@@ -285,13 +285,13 @@ export default async function ProductDetailPage({ params }: Props) {
             {specs.map((spec) => (
               <div
                 key={spec.label}
-                className="rounded-xl border border-slate-200 bg-white p-6"
+                className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6"
               >
                 <span className="material-symbols-outlined mb-4 text-3xl text-primary">
                   {spec.icon}
                 </span>
-                <h4 className="mb-1 text-lg font-bold">{spec.label}</h4>
-                <p className="text-sm text-slate-500">{spec.description}</p>
+                <h4 className="mb-1 text-lg font-bold dark:text-white">{spec.label}</h4>
+                <p className="text-sm text-slate-500 dark:text-slate-400">{spec.description}</p>
               </div>
             ))}
           </div>
@@ -301,12 +301,12 @@ export default async function ProductDetailPage({ params }: Props) {
       {/* Product Description */}
       {(t?.description ?? product.description) && (
         <section className="mt-20">
-          <h3 className="mb-8 flex items-center gap-2 text-2xl font-bold">
+          <h3 className="mb-8 flex items-center gap-2 text-2xl font-bold dark:text-white">
             <span className="material-symbols-outlined">description</span>
             {dict.productDetail.productDescription}
           </h3>
-          <div className="prose prose-slate max-w-none rounded-xl border border-slate-200 bg-white p-8">
-            <p className="leading-relaxed text-slate-600 whitespace-pre-line">
+          <div className="prose prose-slate max-w-none rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8">
+            <p className="leading-relaxed text-slate-600 dark:text-slate-400 whitespace-pre-line">
               {t?.description ?? product.description}
             </p>
           </div>
@@ -315,59 +315,59 @@ export default async function ProductDetailPage({ params }: Props) {
 
       {/* Product Details Table */}
       <section className="mt-20">
-        <h3 className="mb-8 flex items-center gap-2 text-2xl font-bold">
+        <h3 className="mb-8 flex items-center gap-2 text-2xl font-bold dark:text-white">
           <span className="material-symbols-outlined">info</span>
           {dict.productDetail.productDetails}
         </h3>
-        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
           <table className="w-full text-sm">
             <tbody>
               {product.brand && (
-                <tr className="border-b border-slate-100">
-                  <td className="px-6 py-4 font-semibold text-slate-500">{dict.productDetail.brand}</td>
-                  <td className="px-6 py-4">{product.brand}</td>
+                <tr className="border-b border-slate-100 dark:border-slate-800">
+                  <td className="px-6 py-4 font-semibold text-slate-500 dark:text-slate-400">{dict.productDetail.brand}</td>
+                  <td className="px-6 py-4 dark:text-slate-200">{product.brand}</td>
                 </tr>
               )}
-              <tr className="border-b border-slate-100">
-                <td className="px-6 py-4 font-semibold text-slate-500">{dict.productDetail.sku}</td>
-                <td className="px-6 py-4">{product.sku}</td>
+              <tr className="border-b border-slate-100 dark:border-slate-800">
+                <td className="px-6 py-4 font-semibold text-slate-500 dark:text-slate-400">{dict.productDetail.sku}</td>
+                <td className="px-6 py-4 dark:text-slate-200">{product.sku}</td>
               </tr>
-              <tr className="border-b border-slate-100">
-                <td className="px-6 py-4 font-semibold text-slate-500">{dict.productDetail.categoryLabel}</td>
-                <td className="px-6 py-4">{(dict.productSearch.categoryNames as Record<string, string>)[product.category.slug] ?? product.category.name}</td>
+              <tr className="border-b border-slate-100 dark:border-slate-800">
+                <td className="px-6 py-4 font-semibold text-slate-500 dark:text-slate-400">{dict.productDetail.categoryLabel}</td>
+                <td className="px-6 py-4 dark:text-slate-200">{(dict.productSearch.categoryNames as Record<string, string>)[product.category.slug] ?? product.category.name}</td>
               </tr>
               {product.wattage && (
-                <tr className="border-b border-slate-100">
-                  <td className="px-6 py-4 font-semibold text-slate-500">{dict.productDetail.wattage}</td>
-                  <td className="px-6 py-4">{product.wattage}W</td>
+                <tr className="border-b border-slate-100 dark:border-slate-800">
+                  <td className="px-6 py-4 font-semibold text-slate-500 dark:text-slate-400">{dict.productDetail.wattage}</td>
+                  <td className="px-6 py-4 dark:text-slate-200">{product.wattage}W</td>
                 </tr>
               )}
               {product.lumens && (
-                <tr className="border-b border-slate-100">
-                  <td className="px-6 py-4 font-semibold text-slate-500">{dict.productDetail.lumens}</td>
-                  <td className="px-6 py-4">{product.lumens.toLocaleString()}</td>
+                <tr className="border-b border-slate-100 dark:border-slate-800">
+                  <td className="px-6 py-4 font-semibold text-slate-500 dark:text-slate-400">{dict.productDetail.lumens}</td>
+                  <td className="px-6 py-4 dark:text-slate-200">{product.lumens.toLocaleString()}</td>
                 </tr>
               )}
               {product.colorTemperature && (
-                <tr className="border-b border-slate-100">
-                  <td className="px-6 py-4 font-semibold text-slate-500">{dict.productDetail.colorTemperature}</td>
-                  <td className="px-6 py-4">{product.colorTemperature}</td>
+                <tr className="border-b border-slate-100 dark:border-slate-800">
+                  <td className="px-6 py-4 font-semibold text-slate-500 dark:text-slate-400">{dict.productDetail.colorTemperature}</td>
+                  <td className="px-6 py-4 dark:text-slate-200">{product.colorTemperature}</td>
                 </tr>
               )}
               {product.lifespan && (
-                <tr className="border-b border-slate-100">
-                  <td className="px-6 py-4 font-semibold text-slate-500">{dict.productDetail.lifespan}</td>
-                  <td className="px-6 py-4">{product.lifespan.toLocaleString()} {dict.productDetail.hours}</td>
+                <tr className="border-b border-slate-100 dark:border-slate-800">
+                  <td className="px-6 py-4 font-semibold text-slate-500 dark:text-slate-400">{dict.productDetail.lifespan}</td>
+                  <td className="px-6 py-4 dark:text-slate-200">{product.lifespan.toLocaleString()} {dict.productDetail.hours}</td>
                 </tr>
               )}
               {product.cri && (
-                <tr className="border-b border-slate-100">
-                  <td className="px-6 py-4 font-semibold text-slate-500">{dict.productDetail.cri}</td>
-                  <td className="px-6 py-4">{product.cri}+</td>
+                <tr className="border-b border-slate-100 dark:border-slate-800">
+                  <td className="px-6 py-4 font-semibold text-slate-500 dark:text-slate-400">{dict.productDetail.cri}</td>
+                  <td className="px-6 py-4 dark:text-slate-200">{product.cri}+</td>
                 </tr>
               )}
               <tr>
-                <td className="px-6 py-4 font-semibold text-slate-500">{dict.productDetail.availability}</td>
+                <td className="px-6 py-4 font-semibold text-slate-500 dark:text-slate-400">{dict.productDetail.availability}</td>
                 <td className="px-6 py-4">
                   {inStock ? (
                     <span className="font-semibold text-emerald-600">
@@ -395,7 +395,7 @@ export default async function ProductDetailPage({ params }: Props) {
       {/* Related Products */}
       {relatedProducts.length > 0 && (
         <section className="mt-20">
-          <h3 className="mb-8 text-2xl font-bold">{dict.productDetail.relatedProducts}</h3>
+          <h3 className="mb-8 text-2xl font-bold dark:text-white">{dict.productDetail.relatedProducts}</h3>
           <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
             {relatedProducts.map((related) => {
               const rt = related.translations[0];
@@ -409,9 +409,9 @@ export default async function ProductDetailPage({ params }: Props) {
                 <Link
                   key={related.id}
                   href={`/${locale}/products/${related.slug}`}
-                  className="group overflow-hidden rounded-xl border border-slate-200 bg-white transition-shadow hover:shadow-lg"
+                  className="group overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-shadow hover:shadow-lg"
                 >
-                  <div className="relative aspect-square overflow-hidden bg-slate-50">
+                  <div className="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-800">
                     {relatedImage ? (
                       <Image
                         src={relatedImage.url}
@@ -429,7 +429,7 @@ export default async function ProductDetailPage({ params }: Props) {
                     )}
                   </div>
                   <div className="p-4">
-                    <h4 className="mb-1 text-sm font-semibold leading-tight line-clamp-2">
+                    <h4 className="mb-1 text-sm font-semibold leading-tight line-clamp-2 dark:text-white">
                       {rt?.name ?? related.name}
                     </h4>
                     <div className="flex items-center gap-1 text-amber-400 mb-1">
@@ -447,7 +447,7 @@ export default async function ProductDetailPage({ params }: Props) {
                           star
                         </span>
                       ))}
-                      <span className="text-xs text-slate-500 ml-1">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 ml-1">
                         ({related.reviewCount})
                       </span>
                     </div>

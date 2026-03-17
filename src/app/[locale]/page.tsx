@@ -91,7 +91,7 @@ export default async function HomePage({
       {/* Categories */}
       <section className="mt-16">
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 lg:text-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white lg:text-3xl">
             {dict.home.shopByCategory}
           </h2>
           <Link
@@ -109,7 +109,7 @@ export default async function HomePage({
             <Link
               key={cat.slug}
               href={`/${locale}/products?category=${cat.slug}`}
-              className="group flex flex-col gap-4 rounded-xl border border-primary/10 bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-xl"
+              className="group flex flex-col gap-4 rounded-xl border border-primary/10 bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-slate-900 dark:border-slate-800"
             >
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                 <span className="material-symbols-outlined text-3xl">
@@ -117,8 +117,8 @@ export default async function HomePage({
                 </span>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-900">{cat.name}</h3>
-                <p className="text-sm text-slate-500">{cat.description}</p>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">{cat.name}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400">{cat.description}</p>
               </div>
             </Link>
           ))}
@@ -128,7 +128,7 @@ export default async function HomePage({
       {/* Featured Products */}
       <section className="mt-16">
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 lg:text-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white lg:text-3xl">
             {dict.home.featuredProducts}
           </h2>
         </div>
@@ -145,9 +145,9 @@ export default async function HomePage({
               <Link
                 key={product.id}
                 href={`/${locale}/products/${product.slug}`}
-                className="group overflow-hidden rounded-xl border border-primary/10 bg-white transition-all hover:shadow-2xl"
+                className="group overflow-hidden rounded-xl border border-primary/10 bg-white transition-all hover:shadow-2xl dark:bg-slate-900 dark:border-slate-800"
               >
-                <div className="relative aspect-[4/5] overflow-hidden bg-slate-100">
+                <div className="relative aspect-[4/5] overflow-hidden bg-slate-100 dark:bg-slate-800">
                   {imageUrl ? (
                     <img
                       src={imageUrl}
@@ -171,10 +171,10 @@ export default async function HomePage({
                   )}
                 </div>
                 <div className="p-4">
-                  <p className="text-xs font-medium uppercase text-slate-500">
+                  <p className="text-xs font-medium uppercase text-slate-500 dark:text-slate-400">
                     {product.brand || "LuminaLED"}
                   </p>
-                  <h3 className="truncate text-lg font-bold text-slate-900">
+                  <h3 className="truncate text-lg font-bold text-slate-900 dark:text-white">
                     {t?.name ?? product.name}
                   </h3>
                   <div className="flex items-center gap-2">
@@ -202,14 +202,14 @@ export default async function HomePage({
       {/* Promo Banners */}
       <section className="mb-16 mt-20">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-          <div className="group relative overflow-hidden rounded-2xl bg-primary/5 p-8 lg:p-12">
+          <div className="group relative overflow-hidden rounded-2xl bg-primary/5 dark:bg-primary/10 p-8 lg:p-12">
             <div className="relative z-10">
-              <h2 className="mb-4 text-3xl font-black text-slate-900">
+              <h2 className="mb-4 text-3xl font-black text-slate-900 dark:text-white">
                 {dict.home.newArrivalsTitle}
                 <br />
                 {dict.home.newArrivalsSeason}
               </h2>
-              <p className="mb-8 max-w-sm text-slate-600">
+              <p className="mb-8 max-w-sm text-slate-600 dark:text-slate-400">
                 {dict.home.newArrivalsDescription}
               </p>
               <Link

@@ -501,7 +501,16 @@
     "quantity": "SL",
     "resetPassword": "Đặt lại mật khẩu",
     "resetPasswordConfirm": "Đặt lại mật khẩu về mặc định (password123)?",
-    "passwordResetSuccess": "Đặt lại mật khẩu thành công"
+    "passwordResetSuccess": "Đặt lại mật khẩu thành công",
+    "userDetails": "Chi tiết",
+    "userInfo": "Thông tin",
+    "phone": "Điện thoại",
+    "rewardPoints": "Điểm",
+    "wishlist": "Yêu thích",
+    "reviews": "Đánh giá",
+    "recentOrders": "Đơn hàng gần đây",
+    "addresses": "Địa chỉ",
+    "noAddresses": "Chưa có địa chỉ."
   },
   "productReviews": {
     "customerReviews": "Đánh giá từ khách hàng",

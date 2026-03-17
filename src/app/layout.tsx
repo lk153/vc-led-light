@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html className="light">
+    <html className="light" suppressHydrationWarning>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
@@ -30,7 +30,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} bg-background-light font-display text-slate-900 antialiased`}
+        className={`${inter.variable} bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased`}
         suppressHydrationWarning
       >
         {children}

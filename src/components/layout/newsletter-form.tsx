@@ -35,7 +35,7 @@ export default function NewsletterForm({
         onChange={(e) => setEmail(e.target.value)}
         placeholder={placeholder}
         required
-        className="flex-1 rounded-lg border-none bg-slate-100 px-4 text-sm focus:ring-primary"
+        className="flex-1 rounded-lg border-none bg-slate-100 px-4 text-sm focus:ring-primary dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
       />
       <button type="submit" className="rounded-lg bg-primary p-2 text-white">
         <span className="material-symbols-outlined">send</span>
